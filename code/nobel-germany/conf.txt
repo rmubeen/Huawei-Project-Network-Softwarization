@@ -1,0 +1,47 @@
+Number of Nodes: 17
+Avg nodal degree: 1.52941
+Link to node ratio: 1.52941
+Average number of gerenrated demands by a node: 14.2353
+Hannover 9.8 52.39
+Frankfurt 8.66 50.14
+Hamburg 10.08 53.55
+Norden 7.21 53.6
+Bremen 8.8 53.08
+Berlin 13.48 52.52
+Muenchen 11.55 48.15
+Ulm 9.99 48.4
+Nuernberg 11.08 49.45
+Stuttgart 9.12 48.73
+Karlsruhe 8.41 49.01
+Mannheim 8.49 49.49
+Essen 7 51.44
+Dortmund 7.48 51.51
+Duesseldorf 6.78 51.22
+Koeln 7.01 50.92
+Leipzig 12.38 51.34
+Hannover <-> Leipzig: [20, 3580]
+Frankfurt <-> Hannover: [20, 3580]
+Frankfurt <-> Nuernberg: [20, 3150]
+Frankfurt <-> Mannheim: [20, 2720]
+Frankfurt <-> Koeln: [20, 3150]
+Frankfurt <-> Leipzig: [20, 4010]
+Hamburg <-> Hannover: [20, 2720]
+Bremen <-> Hannover: [20, 2720]
+Bremen <-> Hamburg: [20, 2720]
+Bremen <-> Norden: [20, 2720]
+Berlin <-> Hannover: [20, 3580]
+Berlin <-> Hamburg: [20, 3580]
+Berlin <-> Leipzig: [20, 3150]
+Muenchen <-> Ulm: [20, 2720]
+Muenchen <-> Nuernberg: [20, 3150]
+Nuernberg <-> Stuttgart: [20, 3150]
+Stuttgart <-> Ulm: [20, 2720]
+Karlsruhe <-> Stuttgart: [20, 2290]
+Karlsruhe <-> Mannheim: [20, 2290]
+Dortmund <-> Hannover: [20, 3150]
+Dortmund <-> Norden: [20, 3580]
+Dortmund <-> Essen: [20, 2290]
+Dortmund <-> Koeln: [20, 2720]
+Duesseldorf <-> Essen: [20, 2290]
+Duesseldorf <-> Koeln: [20, 2290]
+Leipzig <-> Nuernberg: [20, 3580]

@@ -1,0 +1,4 @@
+Min: 		46
+Max: 		104
+Median: 	53
+Mean: 		60

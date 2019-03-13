@@ -1,0 +1,3 @@
+/home/sepehr/CLionProjects/hua-to-modify/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/sepehr/CLionProjects/hua-to-modify/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/sepehr/CLionProjects/hua-to-modify/cmake-build-debug/CMakeFiles/hua_to_modify.dir
