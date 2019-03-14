@@ -8,15 +8,36 @@
 #include <fstream>
 #include <algorithm>
 #include "hua_disjoint_paths.cpp"
+#include "reading_utilities.cpp"
 using namespace std;
 
-int main(int argc, char** argv) {
+void setVLinkIDsInProtectedPathsOfVN(reading_utilities readLine, string filename, protectedPathsOfVN_C* VNPaths){
+	string src;
+	string dst;
+	string id;
+	string line;
+	ifstream infile;
+	infile.open(filename);
+	if(!infile)
+		cout << "ERR: error opening file " << filename << endl;
 
-	protectedPathsOfVN_C temp(argv[1], 4, 5);
-//	cout << "CP1\n";
-	temp.printProtectedPathsOfVN(argv[2]);
-//	cout << "CP2\n";
-	temp.printStats();
+	while(getline(infile, line)) {
+		src = readLine.get_nth_item(line, 2, ",");
+		dst = readLine.get_nth_item(line, 1, ",");
+		id = readLine.get_nth_item(line, 0, ",");
+		VNPaths->setVLinkID(src, dst, id);
+	}
+}
+
+int main(int argc, char** argv) {
+	reading_utilities readLine;
+	string rootFile = argv[1];
+	string tempStr = rootFile + ".path";
+
+	protectedPathsOfVN_C* VNPaths = new protectedPathsOfVN_C(tempStr, 4, 5);
+	setVLinkIDsInProtectedPathsOfVN(readLine, rootFile, VNPaths);
+	VNPaths->printProtectedPathsOfVN(argv[2]);
+	VNPaths->printStats();
 
 	return 0;
 }

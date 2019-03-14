@@ -56,9 +56,9 @@ path_S protectedPathsOfVN_C::parseInputLine(string line){
 		if((line[i] == ' ') || i == (length-1)) {
 
 			if (spaces == 0)
-				thisLine.vnod_id_1 = temp;
+				thisLine.vnode_id_src = temp;
 			else if (spaces == 1)
-				thisLine.vnod_id_2 = temp;
+				thisLine.vnode_id_dst = temp;
 			else if (spaces == 2)
 				thisLine.src = temp;
 			else if (spaces == 3)
@@ -338,6 +338,9 @@ protectedPathsOfPair_S protectedPathsOfVN_C::populateFieldsOfPairPaths(string sr
 	newPairPaths.src = src;
 	newPairPaths.dst = dst;
 	newPairPaths.paths = paths;
+	newPairPaths.vnode_id_src = newPairPaths.paths[0].vnode_id_src;
+	newPairPaths.vnode_id_dst = newPairPaths.paths[0].vnode_id_dst;
+	newPairPaths.vLinkID = -1;
 //cout << "GP5" << endl;
 
 	newPairPaths.protectedPaths = findProtectedPaths(paths);
@@ -360,7 +363,7 @@ void protectedPathsOfVN_C::initializer(string filename){
 	string src = "";
 	string dst = "";
 	string line;
-int coutvar = 0;
+//int coutvar = 0;
 	while(getline(infile, line)) {
 		if (validateInputLine(line)){
 			newPath = parseInputLine(line);
@@ -421,6 +424,9 @@ void protectedPathsOfVN_C::printPath(path_S path, ofstream& outfile){
 }
 
 void protectedPathsOfVN_C::printProtectedPathsOfPair(protectedPathsOfPair_S paths, ofstream& outfile){
+	outfile << "V LINK ID: \t" << paths.vLinkID << endl;
+	outfile << "V SOURCE: \t" << paths.vnode_id_src << endl;
+	outfile << "V DESTINATION: \t" << paths.vnode_id_dst << endl;
 	outfile << "SOURCE: \t" << paths.src << endl;
 	outfile << "DESTINATION: \t" << paths.dst << endl;
 	outfile << "PATHS: " << paths.paths.size() << endl;
@@ -494,4 +500,14 @@ void protectedPathsOfVN_C::printStats(){
 	cout << "Max: \t\t" << protectedPathsSetStats[protectedPathsSetStats.size()-1] << endl;
 	cout << "Median: \t" << protectedPathsSetStats[protectedPathsSetStats.size()/2] << endl;
 	cout << "Mean: \t\t" << totalProtectedPathsSet/(protectedPathsSetStats.size()) << endl;
+}
+
+void protectedPathsOfVN_C::setVLinkID(string vNodeSrc, string vNodeDst, string vLinkID){
+
+	for(int i = 0; i < this->protectedPathsOfVN.size(); i++) {
+		if((this->protectedPathsOfVN[i].vnode_id_src == vNodeSrc) && (this->protectedPathsOfVN[i].vnode_id_dst == vNodeDst)){
+			this->protectedPathsOfVN[i].vLinkID = strToInt(vLinkID);
+		}
+	}
+
 }

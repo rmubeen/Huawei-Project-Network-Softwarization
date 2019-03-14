@@ -10,8 +10,8 @@
 using namespace std;
 
 struct path_S {
-	string vnod_id_1;
-	string vnod_id_2;
+	string vnode_id_src;
+	string vnode_id_dst;
 	string src;
 	string dst;
 	int id;
@@ -26,6 +26,9 @@ struct path_S {
 //};
 
 struct protectedPathsOfPair_S {
+	int vLinkID;
+	string vnode_id_src;
+	string vnode_id_dst;
 	string src;
 	string dst;
 	vector<path_S> paths;
@@ -62,4 +65,5 @@ public:
 	protectedPathsOfVN_C(string filename, int kOfProtectedPaths, int maxSizeOfDisjointSet);
 	void printProtectedPathsOfVN(string filename);
 	void printStats();
+	void setVLinkID(string vNodeSrc, string vNodeDst, string vLinkID);
 };
