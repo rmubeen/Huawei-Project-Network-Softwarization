@@ -65,5 +65,6 @@ public:
 	protectedPathsOfVN_C(string filename, int kOfProtectedPaths, int maxSizeOfDisjointSet);
 	void printProtectedPathsOfVN(string filename);
 	void printStats();
-	void setVLinkID(string vNodeSrc, string vNodeDst, string vLinkID);
+	void setVLinkID(string vNodeSrc, string vNodeDst, int vLinkID);
+	protectedPathsOfPair_S getPathsOfVLink(int id);
 };

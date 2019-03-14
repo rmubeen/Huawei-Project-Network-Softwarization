@@ -502,12 +502,18 @@ void protectedPathsOfVN_C::printStats(){
 	cout << "Mean: \t\t" << totalProtectedPathsSet/(protectedPathsSetStats.size()) << endl;
 }
 
-void protectedPathsOfVN_C::setVLinkID(string vNodeSrc, string vNodeDst, string vLinkID){
-
+void protectedPathsOfVN_C::setVLinkID(string vNodeSrc, string vNodeDst, int vLinkID){
 	for(int i = 0; i < this->protectedPathsOfVN.size(); i++) {
 		if((this->protectedPathsOfVN[i].vnode_id_src == vNodeSrc) && (this->protectedPathsOfVN[i].vnode_id_dst == vNodeDst)){
-			this->protectedPathsOfVN[i].vLinkID = strToInt(vLinkID);
+			this->protectedPathsOfVN[i].vLinkID = vLinkID;
 		}
 	}
+}
 
+protectedPathsOfPair_S protectedPathsOfVN_C::getPathsOfVLink(int id){
+	for(int i = 0; i < this->protectedPathsOfVN.size(); i++) {
+		if(this->protectedPathsOfVN[i].vLinkID == id){
+			return protectedPathsOfVN[i];
+		}
+	}
 }
