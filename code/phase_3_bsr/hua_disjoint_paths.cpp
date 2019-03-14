@@ -145,7 +145,7 @@ bool protectedPathsOfVN_C::isInVector(int a, vector<int> b){
 bool protectedPathsOfVN_C::areEqual(vector<int> one, vector<int> two){
 	if(one.size() != two.size())
 		return false;
-	
+
 	bool status = true;
 	int size = one.size();
 
@@ -247,7 +247,7 @@ vector<pair<vector<int>, double>> protectedPathsOfVN_C::findProtectedPaths(vecto
 				disjointTable[j][i] = 1;
 			} else {
 				disjointTable[i][j] = 0;
-				disjointTable[j][i] = 0;				
+				disjointTable[j][i] = 0;
 			}
 		}
 	}
@@ -288,8 +288,8 @@ vector<pair<vector<int>, double>> protectedPathsOfVN_C::findProtectedPaths(vecto
 vector<vector<vector<int>>> protectedPathsOfVN_C::findProtectedPathsSet(vector<pair<vector<int>, double>> protectedPaths){
 	vector<vector<vector<int>>> result;
 	int size;
-	int count[maxSizeOfProtectedPath];
-	for (int i = 0; i < maxSizeOfProtectedPath; i++)
+	int count[this->maxSizeOfProtectedPath-1];
+	for (int i = 0; i < this->maxSizeOfProtectedPath-1; i++)
 		count[i] = 0;
 	int cond = 0;
 	bool status;
@@ -299,8 +299,9 @@ vector<vector<vector<int>>> protectedPathsOfVN_C::findProtectedPathsSet(vector<p
 	for (int i = 0; i < protectedPaths.size(); i++)
 	{
 		status = true;
-		for (int j = 0; j < maxSizeOfProtectedPath; j++){
-			if (count[i] != kOfProtectedPaths)
+		for (int j = 0; j < this->maxSizeOfProtectedPath-1; j++){
+//			cout << j << "\t:j:\t" << count[j] << endl;
+			if (count[j] != this->kOfProtectedPaths)
 				status = false;
 		}
 		if(status)
@@ -308,14 +309,19 @@ vector<vector<vector<int>>> protectedPathsOfVN_C::findProtectedPathsSet(vector<p
 
 
 		size = protectedPaths[i].first.size();
-		if((size < maxSizeOfProtectedPath) && (count[size-1] < kOfProtectedPaths)){
-			count[size-1] += 1;;
+//		cout << size << endl;
+		if((size < this->maxSizeOfProtectedPath) && (count[size-2] < this->kOfProtectedPaths)){
+			count[size-2] += 1;;
 			newProtectedPathsSet.push_back(protectedPaths[i].first);
+//			ofstream outfile;
+//			outfile.open("temp");
+//			printVector(protectedPaths[i].first, outfile);
+//			outfile.close();
 		}
 	}
 //	temp.insert(temp.begin(), paths.disjointPaths.begin(), paths.disjointPaths.begin()+size);
 //	cout << temp.size() << " before subset\n";
-	cout << newProtectedPathsSet.size() << endl;
+//	cout << newProtectedPathsSet.size() << endl;
 	result = subsets(newProtectedPathsSet);
 
 	return result;
@@ -368,8 +374,106 @@ void protectedPathsOfVN_C::initializer(string filename){
 	infile.close();
 }
 
-protectedPathsOfVN_C::protectedPathsOfVN_C(string filename){
+protectedPathsOfVN_C::protectedPathsOfVN_C(string filename, int kOfProtectedPaths, int maxSizeOfDisjointSet){
+	this->kOfProtectedPaths = kOfProtectedPaths;
+	this->maxSizeOfProtectedPath = maxSizeOfDisjointSet;
+	initializer(filename);
 
-    initializer(filename);
+}
 
+void protectedPathsOfVN_C::printVector(vector<int> vec, ofstream& outfile){
+	outfile << "{";
+	for(int i = 0; i < vec.size(); i++){
+		outfile << vec[i];
+		if (i != vec.size()-1)
+			outfile << " ";
+	}
+	outfile << "}";
+}
+
+void protectedPathsOfVN_C::printPath(path_S path, ofstream& outfile){
+	outfile << "PATH ID: \t" << path.id;
+	outfile << "\tDISTANCE: \t" << path.dist;
+	outfile << "\tHOPES: \t" << path.hopes;
+	outfile << "\tLINKS: ";
+	for(int i = 0; i < path.links.size(); i++){
+		outfile << "{" << path.links[i] << "} ";
+	}
+	outfile << endl;
+}
+
+void protectedPathsOfVN_C::printProtectedPathsOfPair(protectedPathsOfPair_S paths, ofstream& outfile){
+	outfile << "SOURCE: \t" << paths.src << endl;
+	outfile << "DESTINATION: \t" << paths.dst << endl;
+	outfile << "PATHS: " << paths.paths.size() << endl;
+	outfile << "----------------------------------------------------------" << endl;
+	for(int i = 0; i < paths.paths.size(); i++){
+		printPath(paths.paths[i], outfile);
+	}
+	outfile << "----------------------------------------------------------" << endl;
+	outfile << "DISJOINT SETS: " << paths.protectedPaths.size() << endl;
+	for(int i = 0; i < paths.protectedPaths.size(); i++){
+		outfile << " " << paths.protectedPaths[i].second << " ";
+		printVector(paths.protectedPaths[i].first, outfile);
+		outfile << endl;
+	}
+	outfile << "----------------------------------------------------------" << endl;
+	outfile << "SETS OF DISJOINT SETS: " << paths.protectedPathsSet.size() << endl;
+	for(int i = 0; i < paths.protectedPathsSet.size(); i++){
+		outfile << i << endl;
+		for (int j = 0; j < paths.protectedPathsSet[i].size(); j++)
+		{
+			printVector(paths.protectedPathsSet[i][j], outfile);
+			outfile << " "; //<< pathsVar.disjointPathsSet[i][j].priority << " ";
+		}
+			outfile << endl;
+	}
+	outfile << "----------------------------------------------------------" << endl;
+}
+
+void protectedPathsOfVN_C::printProtectedPathsOfVN(string filename){
+	int size = this->protectedPathsOfVN.size();
+	ofstream outfile;
+	outfile.open(filename);
+
+	for (int i = 0; i < size; i++) {
+		printProtectedPathsOfPair(this->protectedPathsOfVN[i], outfile);
+	}
+
+	outfile.close();
+}
+
+void protectedPathsOfVN_C::printStats(){
+	int totalProtectedPaths = 0;
+	int totalProtectedPathsSet = 0;
+	vector<int> protectedPathsStats(this->protectedPathsOfVN.size());
+	vector<int> protectedPathsSetStats(this->protectedPathsOfVN.size());
+
+	for(int i = 0; i < this->protectedPathsOfVN.size(); i++){
+		protectedPathsStats[i] = this->protectedPathsOfVN[i].protectedPaths.size();
+		totalProtectedPaths += this->protectedPathsOfVN[i].protectedPaths.size();
+		protectedPathsSetStats[i] = this->protectedPathsOfVN[i].protectedPathsSet.size();
+		totalProtectedPathsSet += this->protectedPathsOfVN[i].protectedPathsSet.size();
+
+		cout << this->protectedPathsOfVN[i].src;
+		cout << " \t" << this->protectedPathsOfVN[i].dst;
+		cout << " \t" << this->protectedPathsOfVN[i].paths.size();
+		cout << " \t" << this->protectedPathsOfVN[i].protectedPaths.size();
+		cout << " \t" << this->protectedPathsOfVN[i].protectedPathsSet.size() << endl;
+	}
+
+	sort(protectedPathsStats.begin(), protectedPathsStats.end());
+	sort(protectedPathsSetStats.begin(), protectedPathsSetStats.end());
+
+	cout << "Protected Paths\n";
+	cout << "Min: \t\t" << protectedPathsStats[0] << endl;
+	cout << "Max: \t\t" << protectedPathsStats[protectedPathsStats.size()-1] << endl;
+	cout << "Median: \t" << protectedPathsStats[protectedPathsStats.size()/2] << endl;
+	cout << "Mean: \t\t" << totalProtectedPaths/(protectedPathsStats.size()) << endl;
+
+	cout << "Protected Paths Set\n";
+	cout << "Min: \t\t" << protectedPathsSetStats[0] << endl;
+	cout << "Max: \t\t" << protectedPathsSetStats[protectedPathsSetStats.size()-1] << endl;
+	cout << "Median: \t" << protectedPathsSetStats[protectedPathsSetStats.size()/2] << endl;
+	cout << "Mean: \t\t" << totalProtectedPathsSet/(protectedPathsSetStats.size()) << endl;
 }
