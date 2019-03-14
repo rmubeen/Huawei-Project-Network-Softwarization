@@ -286,27 +286,32 @@ vector<pair<vector<int>, double>> protectedPathsOfVN_C::findProtectedPaths(vecto
 }
 
 vector<vector<vector<int>>> protectedPathsOfVN_C::findProtectedPathsSet(vector<pair<vector<int>, double>> protectedPaths){
-	vector<vector<vector<int>>> result;
+	vector<vector<vector<int>>> result = {};
 	int size;
 	int count[this->maxSizeOfProtectedPath-1];
 	for (int i = 0; i < this->maxSizeOfProtectedPath-1; i++)
 		count[i] = 0;
 	int cond = 0;
 	bool status;
-	vector<vector<int>> newProtectedPathsSet;
+	vector<vector<int>> newProtectedPathsSet = {};
 //	cout << "size in at FPDPS " << size << endl;
 
+//cout << "GP8 " << protectedPaths.size() << endl;
 	for (int i = 0; i < protectedPaths.size(); i++)
 	{
 		status = true;
+//cout << "GP9" << endl;
 		for (int j = 0; j < this->maxSizeOfProtectedPath-1; j++){
 //			cout << j << "\t:j:\t" << count[j] << endl;
+//cout << "GP10" << endl;
 			if (count[j] != this->kOfProtectedPaths)
 				status = false;
+//cout << "GP11" << endl;
 		}
 		if(status)
 			break;
 
+//cout << "GP12" << endl;
 
 		size = protectedPaths[i].first.size();
 //		cout << size << endl;
@@ -322,7 +327,8 @@ vector<vector<vector<int>>> protectedPathsOfVN_C::findProtectedPathsSet(vector<p
 //	temp.insert(temp.begin(), paths.disjointPaths.begin(), paths.disjointPaths.begin()+size);
 //	cout << temp.size() << " before subset\n";
 //	cout << newProtectedPathsSet.size() << endl;
-	result = subsets(newProtectedPathsSet);
+	if(newProtectedPathsSet.size() != 0)
+		result = subsets(newProtectedPathsSet);
 
 	return result;
 }
@@ -332,9 +338,12 @@ protectedPathsOfPair_S protectedPathsOfVN_C::populateFieldsOfPairPaths(string sr
 	newPairPaths.src = src;
 	newPairPaths.dst = dst;
 	newPairPaths.paths = paths;
+//cout << "GP5" << endl;
 
 	newPairPaths.protectedPaths = findProtectedPaths(paths);
+//cout << "GP6" << endl;
 	newPairPaths.protectedPathsSet = findProtectedPathsSet(newPairPaths.protectedPaths);
+//cout << "GP7" << endl;
 
 	return newPairPaths;
 }
@@ -342,13 +351,16 @@ protectedPathsOfPair_S protectedPathsOfVN_C::populateFieldsOfPairPaths(string sr
 void protectedPathsOfVN_C::initializer(string filename){
 	ifstream infile;
 	infile.open(filename);
+	if(!infile){
+		cout << "ERR: error opening input file " << filename << endl;
+	}
 
 	path_S newPath;
 	vector<path_S> newPaths;
 	string src = "";
 	string dst = "";
 	string line;
-
+int coutvar = 0;
 	while(getline(infile, line)) {
 		if (validateInputLine(line)){
 			newPath = parseInputLine(line);
@@ -356,16 +368,22 @@ void protectedPathsOfVN_C::initializer(string filename){
 				src = newPath.src;
 				dst = newPath.dst;
 			}
-
+//cout << coutvar << endl;
+//coutvar++;
 			if (src == newPath.src && dst == newPath.dst){
 				newPaths.push_back(newPath);
 			} else {
+//cout << "GP1" << endl;
+
 				sort(newPaths.begin(), newPaths.end(), [](path_S first, path_S second){return (first.id < second.id);});
+//cout << "GP2" << endl;
 				this->protectedPathsOfVN.push_back(populateFieldsOfPairPaths(src, dst, newPaths));
+//cout << "GP3" << endl;
 				src = newPath.src;
 				dst = newPath.dst;
 				newPaths.clear();
 				newPaths.push_back(newPath);
+//cout << "GP4" << endl;
 			}
 		}
 	}
