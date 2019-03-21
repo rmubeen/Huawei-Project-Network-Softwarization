@@ -14,6 +14,7 @@
 #include "convertor.h"
 #include "reach_table.h"
 #include "solution.h"
+#include "bsr/hua_disjoint_paths.h"
 using namespace std;
 
 #define MAX_CH 12
@@ -39,6 +40,9 @@ private:
     vector<vector<int>> adj_list; // adjacency list for all the shortest paths. Two path are adjacent iff they have at least one common link.
     vector<vector<int>> path_degrees;
     vector<int> next_demands;
+    protectedPathsOfPair_S allVNPaths;
+    int min_slices;
+    solution* vnSolutin;
 
     /*
      * dynamic_table[bit_rate_index][combination_index]. It keeps the best solution (least number of needed slices)
@@ -88,6 +92,12 @@ private:
      * Finally, sorts all the solutions by the number of needed_slices.
      */
     void solve_dp();
+    vector<pair<int, vector<int>>> solveProtectedPaths(protectedPathsOfPair_S allPaths, vector<vector<int>> paths, int index_of_path, int* numOfSlices);
+    vector<pair<int, int>> divide_and_merge(vector<int> division, vector<vector<int>> paths);
+    vector<pair<int, vector<int>>> calculateFinalBWDiv(vector<pair<int, int>> paths_bw, vector<int> split_comb, vector<int> bit_rates);
+    bool solution_feasible(vector<pair<int, vector<int>>> solution);
+    bool is_available(int path_num, int start, int num);
+
 
 public:
     /*
@@ -100,10 +110,21 @@ public:
      *
      * And call the solve_dp function to solve the problem for this vlink.
      */
-    split_option_finder(int bit_rate, int q, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> slices, vector<int> distances, vector<int> hops, vector<vector<int>> adjacency_list, convertor *convertor_ins, reach_table *reach_table_ins, vector<vector<int>> path_degrees, vector<int> next_demands);
+      split_option_finder(bool DBG, int Q, int bit_rate, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> slices, protectedPathsOfPair_S paths, convertor *convertor_ins, reach_table *reach_table_ins, vector<vector<int>> path_degrees, vector<int> next_demands, vector<vector<int>> adj_list);
+//    split_option_finder(int bit_rate, int q, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> slices, vector<int> distances, vector<int> hops, vector<vector<int>> adjacency_list, convertor *convertor_ins, reach_table *reach_table_ins, vector<vector<int>> path_degrees, vector<int> next_demands);
+
+//  split_option_finder
+//      (int bit_rate, int q, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> slices,
+//      vector<int> distances, vector<int> hops, vector<vector<int>> adjacency_list,
+//      convertor *convertor_ins, reach_table *reach_table_ins,
+//      vector<vector<int>> path_degrees, vector<int> next_demands);
 
     // returns a vector of solution that has been sorted based on number of needed slices
     vector<solution> get_solutions_vector();
+
+    solution* get_solution(){
+      return vnSolutin;
+    }
 
     // a debugging function
     void print();

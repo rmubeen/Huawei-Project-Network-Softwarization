@@ -1,0 +1,15 @@
+What are these:
+  vn Location Constraint
+  vn Adjancy List
+  vLink Order
+  vn Path Degree to Next vLinks: look ahead
+
+Doubts about Converter Intance:
+
+Reach Table:
+  get all sum sum_combinations
+  get all permutations
+  get best tuple
+
+
+Algorithm:

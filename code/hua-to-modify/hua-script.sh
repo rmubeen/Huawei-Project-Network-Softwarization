@@ -3,16 +3,16 @@ clear
 
 # testcases-torun/varl2nvn-uniform-demands/20150729/case0/vnr/random/
 
-for cases in 0 1 2 3
+for cases in 0 1 2
 do
 	for vnid in {0..4}
 	do
 		commandname="./vne_heuristic"
-		pntopology=" --pn_topology_file=varl2nvn//case"$cases"//sn.txt"
-		vntopology=" --vn_topology_file=varl2nvn//case"$cases"//vnr//vn"$vnid".txt"
-		location=" --location_constraint_file=varl2nvn//case"$cases"//vnr//vnloc"$vnid".txt"
+		pntopology=" --pn_topology_file=varl2nvn//data/case"$cases"//sn.txt"
+		vntopology=" --vn_topology_file=varl2nvn//data/case"$cases"//vnr//vn"$vnid".txt"
+		location=" --location_constraint_file=varl2nvn//data/case"$cases"//vnr//vnloc"$vnid".txt"
 		finalcommand=$commandname$pntopology$vntopology$location
-		#echo $finalcommand
+		echo $finalcommand
 		$finalcommand | tee "varl2nvn//case"$cases"//vnr//newoutput"$vnid".txt"
 	done
 done

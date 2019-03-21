@@ -10,7 +10,7 @@
 #include <vector>
 #include <cmath>
 #include <map>
-#include "reading_utilities.h"
+#include "reading_utilities.cpp"
 
 using namespace std;
 
@@ -37,7 +37,6 @@ private:
     void check();
 
     // a debugging function
-    void print_sum_combinations();
 
     /*
      * generate all the permutations of the multisets from all_bit_rates with a specific size and sum of members.
@@ -61,7 +60,8 @@ private:
     void generate_all_permutations();
 
 public:
-
+  void print_sum_combinations();
+  void print_base_combinations();
     /*
      * the constructor of this class that gets the path of the reach_table file and some property of the problem.
      * Read the reach table and store that in relating variables of the object.

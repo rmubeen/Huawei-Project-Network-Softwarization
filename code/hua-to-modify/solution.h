@@ -12,8 +12,13 @@ using namespace std;
 class solution {
 private:
     vector<int> paths;
+    vector<vector<int>> slices_req;
+    vector<vector<int>> slices_start;
+    vector<vector<int>> tuples;
+    vector<int> path_needs;
+
     vector<vector<int>> path_degrees;
-    vector<int> tuples; // tuples ids
+//    vector<int> tuples; // tuples ids
     vector<int> starting_slices;
     int needed_slices;
     double cost;
@@ -24,23 +29,38 @@ private:
         cost = 0;
         for(int i = 0; i < paths.size(); i++) {
             int path_id = paths[i];
-            int needed_s = reach_table_instance->get_tuple_needed_slices(tuples[i]);
+            int needed_s = path_needs[i];
             for(int j = 0; j < path_degrees[path_id].size(); j++)
                 cost +=  needed_s * (next_demands[j]/100) * path_degrees[path_id][j];
         }
     }
 
 public:
-    solution(vector<int> paths, vector<int> tuples, vector<int> starting_slices_index, int needed_slices, vector<vector<int>> path_degrees, reach_table *reach_table_ins, vector<int> next_demands) {
+    solution(vector<int> paths, vector<vector<int>> tuples, vector<vector<int>> starting_slices_index, vector<vector<int>> slices_req, vector<vector<int>> path_degrees, vector<int> next_demands) {
         this->paths = paths;
         this->tuples = tuples;
-        this->starting_slices = starting_slices_index;
-        this->needed_slices = needed_slices;
+        this->slices_start = starting_slices_index;
+        this->slices_req = slices_req;
+        this->path_needs = {};
+        this->needed_slices = 0;
         this->path_degrees = path_degrees;
-        reach_table_instance = reach_table_ins;
         this->next_demands = next_demands;
+
+        for (int i = 0; i < slices_req.size(); i++) {
+            int subTotal = 0;
+            for (int j = 0; j < slices_req[i].size(); j++) {
+                subTotal += slices_req[i][j];
+            }
+            this->path_needs.push_back(subTotal);
+            this->needed_slices += subTotal;
+        }
+
+//        reach_table_instance = reach_table_ins;
         calculate_cost();
     }
+
+//    solution(vector<int> paths, vector<int> tuples, vector<int> starting_slices_index, int needed_slices, vector<vector<int>> path_degrees, reach_table *reach_table_ins, vector<int> next_demands) {
+
 
     solution() { //create an invalid solution
         this->needed_slices = -1;
@@ -50,12 +70,16 @@ public:
         return paths;
     }
 
-    vector<int> get_tuples() {
+    vector<vector<int>> get_tuples() {
         return tuples;
     }
 
-    vector<int> get_starting_slices() {
-        return starting_slices;
+    vector<vector<int>> get_starting_slices() {
+        return slices_start;
+    }
+
+    vector<vector<int>> get_req_slices() {
+        return slices_req;
     }
 
     double get_cost() {

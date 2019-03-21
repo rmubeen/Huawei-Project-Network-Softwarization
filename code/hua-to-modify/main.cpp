@@ -15,6 +15,8 @@
 #include "reach_table.h"
 #include "convertor.h"
 #include "io.h"
+//#include "basic_functions.cpp"
+
 
 #define MAX 1.0e10
 #define CONNECTIVITY 3
@@ -35,7 +37,6 @@ const std::string kUsage = "./vne_protection "
 
 
 int main(int argc, char *argv[]) {
-
     auto arg_map = ParseArgs(argc, argv);
     string pn_topology_filename = "";
     string vn_topology_filename = "";
@@ -54,30 +55,97 @@ int main(int argc, char *argv[]) {
     }
     string paths_file = vn_topology_filename + ".path";
 
-//    cout<<paths_file<<endl;
-//    cout<<vn_topology_filename<<endl;
-//    cout<<location_constraint_filename<<endl;
+    cout<<paths_file<<endl;
+    cout<<vn_topology_filename<<endl;
+    cout<<location_constraint_filename<<endl;
 
 
-    int q = 4;
-    int k = 10; //k shortest path
 //    string paths_file = "/home/sepehr/University/Huawei Project/topologies/varl2nvn_with_path/case0/vnr/vn0.txt.path";
 //    string vn_file = "/home/sepehr/University/Huawei Project/topologies/varl2nvn_with_path/case0/vnr/vn0.txt";
 //    string vn_loc_file = "/home/sepehr/University/Huawei Project/topologies/varl2nvn_with_path/case0/vnr/vnloc0.txt";
+
+//  INITIALIZING DATA
     problem_spec vn(paths_file, vn_topology_filename, location_constraint_filename);
-
-
     convertor convertor_instance(k, q);
     string table_path = "ONE_v1.csv";
+//    cout << "CP1\n";
     reach_table reach_table_instance(table_path, q, k);
+//    cout << "CP2\n";
 
+/*
+    cout << "Printing problem_spec VN\n";
 
+    cout << "vLinks\n";
+    print2DVector(vn.vlinks);
+    cout << endl;
+
+    cout << "vn Shortest Paths\n";
+    print2DVector(vn.shortest_paths);
+    cout << endl;
+
+    cout << "vn Location Constraint\n";
+    print2DVector(vn.loc_constraint);
+    cout << endl;
+
+    cout << "vLink Shortest Path Indexes\n";
+    print2DVector(vn.vlink_shortest_paths_indexes);
+    cout << endl;
+
+    cout << "vn Adjancy List\n";
+    print2DVector(vn.adjacency_list);
+    cout << endl;
+
+    cout << "vLink Order\n";
+    printVector(vn.vlink_order);
+    cout << endl;
+
+    cout << "vn Path Degree to Next vLinks\n";
+    print2DVector(vn.path_degree_to_next_vlinks);
+    cout << endl;
+*/
+/*
+    cout << "Printing convertor convertor_instance\n";
+    cout << "number of combinations\n";
+    cout << convertor_instance.get_number_of_combinations() << endl;
+
+    cout << "int to combinations\n";
+    printVector(convertor_instance.int_to_combination(300));
+    cout << endl;
+
+    cout << "index of combinations\n";
+    cout << convertor_instance.get_combination_index(convertor_instance.int_to_combination(300));
+    cout << endl;
+*/
+/*
+    cout << "Printing reach_table reach_table_instance\n";
+    cout << "get all bit rates vector\n";
+    printVector(reach_table_instance.get_all_bit_rates_vector());
+    cout << endl;
+
+    cout << "get all sum combinations\n";
+    print2DVector(**reach_table_instance.get_all_sum_combinations());
+
+    cout << "get all permutations\n";
+    print2DVector(reach_table_instance.get_all_permutations(300));
+
+    cout << "get all bit rate combinations\n";
+    print2DVector(reach_table_instance.get_all_bit_rate_combination_with_specific_sum(8, 4));
+
+    cout << "get number of bit rates\n";
+    cout << reach_table_instance.get_number_of_bit_rates() << endl;
+
+    cout << "get bit rate index\n";
+    cout << reach_table_instance.get_bit_rate_index(300) << endl;
+
+    cout << "get best tuple\n";
+    printVector(reach_table_instance.get_best_tuple(400, 300));
+*/
     double cost = 0;
     vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> path_slices(vn.shortest_paths.size(), bitset<NUMBER_OF_PHYSICAL_SLICES> (0));
 
     for(int i = 0; i < vn.vlink_order.size(); i++) {
+        // FOR EACH VLink
         int vlink_index = vn.vlink_order[i];
-
         int bit_rate = vn.vlinks[vlink_index][3];
 
         vector<bitset<NUMBER_OF_PHYSICAL_SLICES> > current_vlink_path_slices;
@@ -86,17 +154,22 @@ int main(int argc, char *argv[]) {
         vector<vector<int>> adj_list;
         vector<vector<int>> path_degrees;
         vector<int> next_demands;
-
+//1
         for(int j = i+1; j < vn.vlink_order.size(); j++) {
             int index = vn.vlink_order[j];
             int demand = vn.vlinks[index][3];
             next_demands.push_back(demand);
         }
-
+///1
         int starting_path_index = vn.vlink_shortest_paths_indexes[vlink_index][2];
         int ending_path_index = vn.vlink_shortest_paths_indexes[vlink_index][3];
 
+//        cout << "priting next demands vec\n";
+//        printVector(next_demands);
+//        cout << endl;
+
         for(int j = starting_path_index; j < ending_path_index; j++) {
+            // FOR EACH PATH OF VLink
             current_vlink_path_slices.push_back(path_slices[j]);
 
             number_of_hops.push_back(vn.shortest_paths[j][6]);
@@ -116,6 +189,10 @@ int main(int argc, char *argv[]) {
 
 
         split_option_finder solver(bit_rate, q, current_vlink_path_slices, distances, number_of_hops, adj_list,  &convertor_instance, &reach_table_instance, path_degrees, next_demands);
+//        split_option_finder solver
+//              (bit_rate, q, current_vlink_path_slices, distances,
+//              number_of_hops, adj_list,  &convertor_instance,
+//              &reach_table_instance, path_degrees, next_demands);
 
 
         vector<solution> solutions = solver.get_solutions_vector();
@@ -130,6 +207,14 @@ int main(int argc, char *argv[]) {
         vector<int> paths = solutions[0].get_paths();
         vector<int> starting_slices = solutions[0].get_starting_slices();
         vector<int> tuples_indexes = solutions[0].get_tuples();
+/*
+        if (true) {
+          printVector(paths); cout << endl;
+          printVector(starting_slices); cout << endl;
+          printVector(tuples_indexes); cout << endl; cout << endl;
+        }
+*/
+//        solver.print_solutions();
 
         for(int j = 0; j < paths.size(); j++) {
             int path_index = paths[j] + starting_path_index;
@@ -148,6 +233,7 @@ int main(int argc, char *argv[]) {
 //        solver.print_solutions();
 //        for(int j = 0; j < path_slices.size(); j++)
 //            cout<<path_slices[j].to_string<char, string::traits_type, string::allocator_type>()<<endl;
+solver.print();
     }
     cout<<cost<<endl;
 

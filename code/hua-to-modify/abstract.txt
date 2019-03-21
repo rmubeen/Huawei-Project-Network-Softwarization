@@ -1,0 +1,42 @@
+What are these:
+  vn Location Constraint
+  vn Adjancy List
+  vLink Order
+  vn Path Degree to Next vLinks: look ahead
+
+Doubts about Converter Intance:
+
+Reach Table:
+  get all sum sum_combinations
+  get all permutations
+  get best tuple
+
+
+Algorithm:
+  Read DATA
+  For each vlink:
+    Find solution:
+      For each valid bit_rate:
+        For each valid split:
+          For each path:
+            Find solution for base/advance case
+    Update Path slices
+
+
+-----> ADD: Add Adjency List Prop
+-----> ADD: Dynamic Table
+New Algo:
+  For each vlink:
+    For every Pps:
+.      Compute all need permutations:
+      For every permutation:
+        Divide permutation
+        Merge permutation
+        Compute all q permutations
+        For every q permutation:
+---->          Find ordered protected paths
+---->          For every order
+          Find feasible solution
+          break if solution found
+
+Delete print base functions.
