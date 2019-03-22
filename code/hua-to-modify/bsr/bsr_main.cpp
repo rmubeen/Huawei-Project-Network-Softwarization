@@ -13,7 +13,7 @@
 #include "hua_disjoint_paths.cpp"
 using namespace std;
 
-#define Q 6 //max number of slices
+#define Q 8 //max number of slices
 #define K 25 //k shortest path
 #define TABLE_PATH "input/ONE_varyingmod-varyingfec.csv"
 
@@ -72,7 +72,7 @@ int main(int argc, char * argv[]){
 	//PREPARING INITIAL DATA//
   problem_spec vn(paths_file, vn_topology_filename, location_constraint_filename);
 	printPy("Problem Spec VN Defined\n", DEBUG);
-  convertor convertor_instance(K, Q);
+//  convertor convertor_instance(K, Q);
 	printPy("Converter Instance Defined\n", DEBUG);
   reach_table reach_table_instance(TABLE_PATH, Q, K);
 	printPy("Reach Table Instance Defined\n", DEBUG);
@@ -88,6 +88,8 @@ int main(int argc, char * argv[]){
 
 	//INITIALIZING COST AND PATHS//
 	time_t t1 = time(NULL);
+	printPy("\n");
+	printPy(t1-t0); printPy(" second(s) taken for initialization\n");
 	double cost = 0;
   vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> path_slices(vn.shortest_paths.size(), bitset<NUMBER_OF_PHYSICAL_SLICES> (0));
 
@@ -97,9 +99,7 @@ int main(int argc, char * argv[]){
 		//GETING DATA FOR THIS VN//
     int vlink_index = vn.vlink_order[vlink_it];
     int vlink_id = vn.vlinks[vlink_index][0];
-		cout << "\nvlink src/dst: \n";
-		cout << vn.vlinks[vlink_index][1] << endl;
-		cout << vn.vlinks[vlink_index][2] << endl;
+//			cout << "\nvlink src/dst: " << vn.vlinks[vlink_index][1] << " " << vn.vlinks[vlink_index][2] << endl;
 		printPy("vLink ID: ", DEBUG); printPy(vlink_id, DEBUG); printPy("\n", DEBUG);
     int bit_rate = vn.vlinks[vlink_index][3];
     protectedPathsOfPair_S vlink_paths = VNPaths->getPathsOfVLink(vlink_id);
@@ -131,26 +131,26 @@ int main(int argc, char * argv[]){
 
 		//SOLVING THIS VN//
     split_option_finder solver(allDebug, bsr_value, Q, bit_rate, current_vlink_path_slices,
-                              vlink_paths, &convertor_instance, &reach_table_instance, path_degrees, next_demands, adj_list);
+                              vlink_paths, &reach_table_instance, path_degrees, next_demands, adj_list);
 
 		//GETING SOLUTION OF ABOVE SOLVER//
-		solution* vnSol = solver.get_solution();
-		if(vnSol->get_needed_slices() == -1) {
+		solution vnSol = solver.get_optimal_solution();
+		if(vnSol.get_needed_slices() == -1) {
 				cout << "NO Solution ----> " << vlink_it <<"/"<<vn.vlink_order.size()<< endl;
 				if (vlink_paths.protectedPathsSet.size() > 0)
 						return 1;
 		}
 
-		vnSol->print_solution();
+		vnSol.print_solution();
 
 		//UPDATING COST VARIABLE//
-		cost += vnSol->get_needed_slices();
+		cost += vnSol.get_needed_slices();
 //		cost += vnSol->get_paths().size() * 0.1;
 
 		//UPDATING PATH SLICES//
-		vector<int> paths = vnSol->get_paths();
-		vector<vector<int>> starting_slices = vnSol->get_starting_slices();
-		vector<vector<int>> slices_req = vnSol->get_req_slices();
+		vector<int> paths = vnSol.get_paths();
+		vector<vector<int>> starting_slices = vnSol.get_starting_slices();
+		vector<vector<int>> slices_req = vnSol.get_req_slices();
 //		print2DVector(adj_list);
 		for(int i = 0; i < paths.size(); i++) {
 				int path_index = paths[i] + starting_path_index;
@@ -174,9 +174,8 @@ int main(int argc, char * argv[]){
   }
 	time_t t2 = time(NULL);
 
-	printPy("\n");
-	printPy(t2-t0); printPy(" second(s) taken in total\n");
 	printPy(t2-t1); printPy(" second(s) taken for solution\n");
+	printPy(t2-t0); printPy(" second(s) taken in total\n");
 	printPy("cost = "); printPy(cost); printPy("\n\n");
 
 	if(output_filename == ""){

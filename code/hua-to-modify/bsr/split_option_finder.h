@@ -41,7 +41,8 @@ private:
     vector<int> next_demands;
     protectedPathsOfPair_S allVNPaths;
     int min_slices;
-    solution* vnSolutin;
+    vector<vector<solution>> vnSolutions;
+    solution optimalSolution;
     bool debug;
     double bsr_value;
 
@@ -51,12 +52,12 @@ private:
      */
     int enough_space(int needed_slices, bitset<NUMBER_OF_PHYSICAL_SLICES> p);
 
-    vector<pair<int, vector<int>>> solveProtectedPaths(protectedPathsOfPair_S allPaths, vector<vector<int>> paths, int index_of_path, int* numOfSlices);
+    void solveProtectedPaths(vector<vector<int>> paths, int index_of_path, int* numOfSlices);
     vector<pair<int, int>> divide_and_merge(vector<int> division, vector<vector<int>> paths);
     vector<pair<int, vector<int>>> calculateFinalBWDiv(vector<pair<int, int>> paths_bw, vector<int> split_comb, vector<int> bit_rates);
-    bool solution_feasible(vector<pair<int, vector<int>>> solution);
-    bool is_available(int path_num, int start, int num);
-
+    solution solution_feasible(vector<pair<int, vector<int>>> solution);
+    bool is_available(int start, int num, bitset<NUMBER_OF_PHYSICAL_SLICES> pathSlices);
+    int firstFitAllocationConsideringAdjacentPaths(int pathId, int slicesReq, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> pathSlices, vector<int> adjPaths);
 
 public:
     /*
@@ -69,10 +70,14 @@ public:
      *
      * And call the solve_dp function to solve the problem for this vlink.
      */
-      split_option_finder(bool DBG, double bsr_value, int Q, int bit_rate, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> slices, protectedPathsOfPair_S paths, convertor *convertor_ins, reach_table *reach_table_ins, vector<vector<int>> path_degrees, vector<int> next_demands, vector<vector<int>> adj_list);
+      split_option_finder(bool DBG, double bsr_value, int Q, int bit_rate, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> slices, protectedPathsOfPair_S paths, reach_table *reach_table_ins, vector<vector<int>> path_degrees, vector<int> next_demands, vector<vector<int>> adj_list);
 
-      solution* get_solution(){
-          return vnSolutin;
+      vector<vector<solution>> get_solutions(){
+          return this->vnSolutions;
+      }
+
+      solution get_optimal_solution(){
+          return this->optimalSolution;
       }
 };
 

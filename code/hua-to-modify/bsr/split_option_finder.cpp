@@ -4,9 +4,9 @@
 
 #include "split_option_finder.h"
 
-bool split_option_finder::is_available(int path_num, int start, int num){
+bool split_option_finder::is_available(int start, int num, bitset<NUMBER_OF_PHYSICAL_SLICES> pathSlices){
     for(int i = 0; i < num; i++){
-      if(path_slices[path_num].test(start+i) == true)
+      if(pathSlices.test(start+i) == true)
           return false;
     }
     return true;
@@ -71,42 +71,74 @@ vector<pair<int, vector<int>>> split_option_finder::calculateFinalBWDiv(vector<p
     return result;
 }
 
-bool split_option_finder::solution_feasible(vector<pair<int, vector<int>>> solution) {
+int split_option_finder::firstFitAllocationConsideringAdjacentPaths(int pathId, int slicesReq, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> pathSlices, vector<int> adjPaths){
+    bitset<NUMBER_OF_PHYSICAL_SLICES> thisPath = pathSlices[pathId];
+
+    for (int nthFit = 0; nthFit < NUMBER_OF_PHYSICAL_SLICES; nthFit++) {
+        if(thisPath.test(nthFit) == false){
+            int start = this->enough_space(slicesReq, thisPath);
+            for (int adj_list_it = 0; (adj_list_it < adjPaths.size()) && (start > -1); adj_list_it++) {
+                if(!(this->is_available(start, slicesReq, pathSlices[adjPaths[adj_list_it]]))){
+                    printPy("Not enough space on adjacent paths: ", debug); printPy(start, debug); printPy(" ", debug); printPy(slicesReq, debug); printPy(" ", debug); printVector(adjPaths, debug); printPy("\n", debug);;
+                    start = -1;
+                    break;
+                }
+            }
+            if(start > -1){
+                return start;
+            }
+            thisPath.set(nthFit);
+        }
+    }
+    printPy("Not enough space: ", debug); printPy(pathId, debug); printPy(" ", debug); printPy(slicesReq, debug); printPy(" ", debug); printVector(adjPaths, debug); printPy("\n", debug); printVector(pathSlices, debug); printPy("\n", debug);
+    return -1;
+}
+
+solution split_option_finder::solution_feasible(vector<pair<int, vector<int>>> solutionVec){
+    solution result;
+    vector<int> paths;
+    vector<vector<int>> tuples;
+    vector<vector<int>> starting_slices_index;
+    vector<vector<int>> slices_req;
+
     vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> temp_path_slices = this->path_slices;
     printPy("Inter Slices: ", debug); printVector(temp_path_slices, debug);
 
-    for(int path_it = 0; path_it < solution.size(); path_it++){
-        for (int tuple_it = 0; tuple_it < solution[path_it].second.size(); tuple_it++) {
-            int slices_req = this->reach_table_instance->get_tuple_needed_slices(solution[path_it].second[tuple_it]);
-            int start = this->enough_space(slices_req, temp_path_slices[solution[path_it].first]);
-            if (start == -1){
-                printPy("Not enough space available on path: ", debug); printPy(slices_req, debug); printPy(" ", debug); printPy(temp_path_slices[solution[path_it].first], debug); printPy("\n", debug);
-                return false;
+    for(int path_it = 0; path_it < solutionVec.size(); path_it++){
+        paths.push_back(solutionVec[path_it].first);
+        tuples.push_back(solutionVec[path_it].second);
+        starting_slices_index.push_back({});
+        slices_req.push_back({});
+
+        for (int tuple_it = 0; tuple_it < solutionVec[path_it].second.size(); tuple_it++) {
+            int slice_req = this->reach_table_instance->get_tuple_needed_slices(solutionVec[path_it].second[tuple_it]);
+            slices_req[path_it].push_back(slice_req);
+
+            int start = this->firstFitAllocationConsideringAdjacentPaths(solutionVec[path_it].first, slice_req, temp_path_slices, adj_list[solutionVec[path_it].first]);
+            if(start == -1){
+                result = solution();
+                return result;
             }
-            for (int adj_list_it = 0; adj_list_it < adj_list[solution[path_it].first].size(); adj_list_it++) {
-                if(!(this->is_available(adj_list[solution[path_it].first][adj_list_it], start, slices_req))){
-                    printPy("Not enough space on adjacent paths: ", debug); printPy(start, debug); printPy(" ", debug); printPy(slices_req, debug); printPy(" ", debug); printPy(adj_list[solution[path_it].first][adj_list_it], debug); printPy(" ", debug); printPy(temp_path_slices[adj_list[solution[path_it].first][adj_list_it]], debug); printPy("\n", debug);
-                    return false;
-                }
-            }
-            for (int i = 0; i < slices_req; i++) {
-                temp_path_slices[solution[path_it].first].set(start+i);
-                for (int adj_list_it = 0; adj_list_it < adj_list[solution[path_it].first].size(); adj_list_it++)
-                    temp_path_slices[adj_list[solution[path_it].first][adj_list_it]].set(start+i);
+            starting_slices_index[path_it].push_back(start);
+            for (int i = 0; i < slice_req; i++) {
+                temp_path_slices[solutionVec[path_it].first].set(start+i);
+                for (int adj_list_it = 0; adj_list_it < adj_list[solutionVec[path_it].first].size(); adj_list_it++)
+                    temp_path_slices[adj_list[solutionVec[path_it].first][adj_list_it]].set(start+i);
             }
         }
     }
 
-    return true;
+    result = solution(paths, tuples, starting_slices_index, slices_req, this->path_degrees, this->next_demands, this->allVNPaths);
+    return result;
 }
 
-vector<pair<int, vector<int>>> split_option_finder::solveProtectedPaths(protectedPathsOfPair_S allPaths, vector<vector<int>> paths, int index_of_path, int* numOfSlices) {
+void split_option_finder::solveProtectedPaths(vector<vector<int>> paths, int index_of_path, int* numOfSlices) {
     printPy("Path to be Solved:\n", debug); print2DVector(paths, debug);
     int size_of_path = paths.size();
-    int number_of_paths = allPaths.paths.size();
+    int number_of_paths = this->allVNPaths.paths.size();
     vector<int> bitRatesVector = reach_table_instance->get_all_bit_rates_vector();
     sort(bitRatesVector.begin(), bitRatesVector.end());
-    vector<pair<int, vector<int>>> solution = {};
+    vector<pair<int, vector<int>>> solutionVec = {};
     int slices = -1;
 
     vector<vector<int>> all_divisions = intPermutationsHelper(bit_rate, reach_table_instance->get_all_bit_rates_vector(), size_of_path);
@@ -133,7 +165,7 @@ vector<pair<int, vector<int>>> split_option_finder::solveProtectedPaths(protecte
 //                    printPy("entered path iterator\n", debug);
                     vector<int> tupleIndces = {};
                     for (int i = 0; i < final_bw_div[path_it].second.size(); i++) {
-                        int path_dist = allPaths.paths[final_bw_div[path_it].first].dist;
+                        int path_dist = this->allVNPaths.paths[final_bw_div[path_it].first].dist;
                         vector<int> tuple = reach_table_instance->get_best_tuple(path_dist, final_bw_div[path_it].second[i]);
                         if (tuple.size() == 0){
                             printPy("Valid tuple for path not found-> ", debug); printPy(final_bw_div[path_it].first, debug); printPy(" ", debug); printPy(path_dist, debug); printPy(" ", debug); printPy(final_bw_div[path_it].second[i], debug);
@@ -147,36 +179,24 @@ vector<pair<int, vector<int>>> split_option_finder::solveProtectedPaths(protecte
                     tempSolution.push_back(make_pair(final_bw_div[path_it].first, tupleIndces));
                 }
                 if(status){
-                    if (slices == -1 || tempSlices < slices) {
-                        printPy("found a candidate solution\n", debug);
-                        if (this->solution_feasible(tempSolution)){
-                          printPy("***************new solution found! updating...\n", debug);
-                          solution = tempSolution;
-                          slices = tempSlices;
+//                    if (slices == -1 || tempSlices < slices) {
+                    printPy("found a candidate solution\n", debug);
+                    solution newSolution = this->solution_feasible(tempSolution);
+                    if (newSolution.get_needed_slices()>0){
+                        printPy("***************new solution found! updating...\n", debug);
+                        this->vnSolutions[index_of_path].push_back(newSolution);
+                        slices = tempSlices;
 //                          printPy("Naaaaaaaaaaaaaaaaaaaaaaaaa\n");
-                        }
                     }
+//                }
                 }
             }
         }
     }
-    printPy(slices, debug);
-    printPy(" <-slices required for this path\n", debug);
-    *numOfSlices = slices;
-    return solution;
-/*
-    if((slices != -1) && (slices != 99999999)){
-        printPy("Paths\n");
-        print2DVector(paths);
-        printPy("\nSlices Required: ");
-        printPy(slices);
-        printPy("\n\n");
-    }
-*/
 }
 
 split_option_finder::split_option_finder(bool DBG, double bsr_value, int Q, int bit_rate, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> slices,
-                protectedPathsOfPair_S paths, convertor *convertor_ins, reach_table *reach_table_ins, vector<vector<int>> path_degrees, vector<int> next_demands, vector<vector<int>> adj_list){
+                protectedPathsOfPair_S paths, reach_table *reach_table_ins, vector<vector<int>> path_degrees, vector<int> next_demands, vector<vector<int>> adj_list){
 
   printPy("\n-------------> ENTERING INTO SOLVER\n", DBG);
   this->bsr_value = bsr_value;
@@ -188,7 +208,7 @@ split_option_finder::split_option_finder(bool DBG, double bsr_value, int Q, int 
   printPy(Q, DBG); printPy(" <- Q\n", DBG);
   this->path_slices = slices;
   printPy("Initial Slices: ", DBG); printVector(slices, DBG);
-  this->convertor_instance = convertor_ins;
+//  this->convertor_instance = convertor_ins;
   this->reach_table_instance = reach_table_ins;
   this->allVNPaths = paths;
   printPy(paths.protectedPathsSet.size(), DBG); printPy(" <- # of paths\n", DBG);
@@ -201,39 +221,26 @@ split_option_finder::split_option_finder(bool DBG, double bsr_value, int Q, int 
   vector<pair<int, vector<int>>> cur_sol = {};
   int* numOfSlices = new int(0);
 
-    for(int PPSet_it = 0; PPSet_it < paths.protectedPathsSet.size(); PPSet_it++){
-        vector<pair<int, vector<int>>> tempSolution = this->solveProtectedPaths(paths, paths.protectedPathsSet[PPSet_it], PPSet_it, numOfSlices);
-//        printPy("Inter Slices: ", DBG); printVector(slices, DBG);
-        if (this->min_slices == -1 || ((*numOfSlices < this->min_slices) && (*numOfSlices != -1))) {
-            cur_sol = tempSolution;
-            this->min_slices = *numOfSlices;
+  this->vnSolutions = {};
+  for(int PPSet_it = 0; PPSet_it < paths.protectedPathsSet.size(); PPSet_it++){
+      this->vnSolutions.push_back({});
+      this->solveProtectedPaths(paths.protectedPathsSet[PPSet_it], PPSet_it, numOfSlices);
+      sort(vnSolutions[PPSet_it].begin(), vnSolutions[PPSet_it].end(), [](solution a, solution b){
+          return a.get_needed_slices() < b.get_needed_slices();
+      });
+  }
+
+  bool optimalSolutionSet = false;
+
+  for(int i = 0; i < this->vnSolutions.size(); i++){
+      for (int j = 0; j < this->vnSolutions[i].size(); j++) {
+        if(!optimalSolutionSet){
+          this->optimalSolution = this->vnSolutions[i][j];
+          optimalSolutionSet = true;
+        } else if(this->vnSolutions[i][j].get_needed_slices() < this->optimalSolution.get_needed_slices()){
+          this->optimalSolution = this->vnSolutions[i][j];
         }
-    }
+      }
+  }
 
-    vector<int> sol_paths;
-    vector<vector<int>> slices_req;
-    vector<vector<int>> slices_start;
-    vector<vector<int>> tuples;
-    vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> temp_path_slices = this->path_slices;
-
-    for(int path_it = 0; path_it < cur_sol.size(); path_it++){
-        sol_paths.push_back(cur_sol[path_it].first);
-        slices_req.push_back({});
-        slices_start.push_back({});
-        tuples.push_back({});
-
-        for (int tuple_it = 0; tuple_it < cur_sol[path_it].second.size(); tuple_it++) {
-            tuples[path_it].push_back(cur_sol[path_it].second[tuple_it]);
-            int slice_req = this->reach_table_instance->get_tuple_needed_slices(cur_sol[path_it].second[tuple_it]);
-            slices_req[path_it].push_back(slice_req);
-            int start = this->enough_space(slice_req, temp_path_slices[cur_sol[path_it].first]);
-            slices_start[path_it].push_back(start);
-        }
-    }
-
-    if(this->min_slices == -1)
-        this->vnSolutin = new solution();
-    else
-        this->vnSolutin = new solution(sol_paths, tuples, slices_start, slices_req, path_degrees, next_demands, paths);
-     printPy("solution slices: ", DBG); printPy(this->min_slices, debug); printPy("\n", debug);
 }
