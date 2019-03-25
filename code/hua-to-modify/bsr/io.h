@@ -10,8 +10,8 @@
 #include <string>
 #include <string.h>
 
-#define slice_width 50
-//#define slice_width 12.5
+//#define slice_width 50
+#define slice_width 12.5
 
 
 std::unique_ptr<std::map<std::string, std::string> > ParseArgs(int argc,

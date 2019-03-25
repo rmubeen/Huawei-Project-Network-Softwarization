@@ -60,13 +60,13 @@ vector<pair<int, int>> split_option_finder::divide_and_merge(vector<int> divisio
 	return bwDiv;
 }
 
-vector<pair<int, vector<int>>> split_option_finder::calculateFinalBWDiv(vector<pair<int, int>> paths_bw, vector<int> split_comb, vector<int> bit_rates){
-    vector<pair<int, vector<int>>> result;
+vector<pair<int, vector<vector<int>>> > split_option_finder::calculateFinalBWDiv(vector<pair<int, int>> paths_bw, vector<int> split_comb, vector<int> bit_rates){
+    vector<pair<int, vector<vector<int>>> > result = {};
     for (int path_it = 0; path_it < paths_bw.size(); path_it++) {
-        vector<vector<int>> bw_div = intPermutationsHelper(paths_bw[path_it].second, bit_rates, split_comb[path_it]);
+        vector<vector<int>> bw_div = remove_repition_in_vector(intPermutationsHelper(paths_bw[path_it].second, bit_rates, split_comb[path_it]));
         if(bw_div.size() == 0)
           return {};
-        result.push_back(make_pair(paths_bw[path_it].first, bw_div[0]));
+        result.push_back(make_pair(paths_bw[path_it].first, bw_div));
     }
     return result;
 }
@@ -94,42 +94,104 @@ int split_option_finder::firstFitAllocationConsideringAdjacentPaths(int pathId, 
     return -1;
 }
 
+
 solution split_option_finder::solution_feasible(vector<pair<int, vector<int>>> solutionVec){
     solution result;
-    vector<int> paths;
-    vector<vector<int>> tuples;
-    vector<vector<int>> starting_slices_index;
-    vector<vector<int>> slices_req;
-
-    vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> temp_path_slices = this->path_slices;
-    printPy("Inter Slices: ", debug); printVector(temp_path_slices, debug);
+    vector<int> paths = {};
+    vector<vector<int>> tuples = {};
+    vector<vector<int>> starting_slices_index = {};
+    vector<vector<int>> slices_req = {};
+    vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> pathSlices = this->path_slices;
+    printPy("Inter Slices: ", debug); printVector(pathSlices, debug);
+    bool flag;
 
     for(int path_it = 0; path_it < solutionVec.size(); path_it++){
-        paths.push_back(solutionVec[path_it].first);
-        tuples.push_back(solutionVec[path_it].second);
-        starting_slices_index.push_back({});
-        slices_req.push_back({});
+        int path_index = solutionVec[path_it].first;
+        vector<int> temp_start;
+        vector<int> temp_req;
+        vector<int> temp_tuples = solutionVec[path_it].second;
+        sort(temp_tuples.begin(), temp_tuples.end());
+        vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> tempSlices;
 
-        for (int tuple_it = 0; tuple_it < solutionVec[path_it].second.size(); tuple_it++) {
-            int slice_req = this->reach_table_instance->get_tuple_needed_slices(solutionVec[path_it].second[tuple_it]);
-            slices_req[path_it].push_back(slice_req);
+        do{
+            flag = true;
+            tempSlices = pathSlices;
+            temp_start = {};
+            temp_req = {};
 
-            int start = this->firstFitAllocationConsideringAdjacentPaths(solutionVec[path_it].first, slice_req, temp_path_slices, adj_list[solutionVec[path_it].first]);
-            if(start == -1){
-                result = solution();
-                return result;
+            for (int tuple_it = 0; tuple_it < temp_tuples.size(); tuple_it++) {
+                int slice_req = this->reach_table_instance->get_tuple_needed_slices(temp_tuples[tuple_it]);
+                temp_req.push_back(slice_req);
+                int start = this->enough_space(slice_req, tempSlices[solutionVec[path_it].first]);
+                if(start == -1){
+                    flag = false;
+                    break;
+                }
+                temp_start.push_back(start);
+                for (int i = 0; i < slice_req; i++) {
+                    tempSlices[path_index].set(start+i);
+                    for (int adj_list_it = 0; adj_list_it < adj_list[path_index].size(); adj_list_it++)
+                        tempSlices[adj_list[path_index][adj_list_it]].set(start+i);
+                }
             }
-            starting_slices_index[path_it].push_back(start);
-            for (int i = 0; i < slice_req; i++) {
-                temp_path_slices[solutionVec[path_it].first].set(start+i);
-                for (int adj_list_it = 0; adj_list_it < adj_list[solutionVec[path_it].first].size(); adj_list_it++)
-                    temp_path_slices[adj_list[solutionVec[path_it].first][adj_list_it]].set(start+i);
+
+            if(flag){
+              break;
             }
+        }while(next_permutation(temp_tuples.begin(), temp_tuples.end()));
+
+        if(flag){
+            paths.push_back(path_index);
+            tuples.push_back(temp_tuples);
+            starting_slices_index.push_back(temp_start);
+            slices_req.push_back(temp_req);
+            pathSlices = tempSlices;
+        } else {
+            result = solution();
+            printPy("Couldn't find solution for a Solution Vec\n", debug);
+            return result;
+        }
+    }
+    result = solution(paths, tuples, starting_slices_index, slices_req, this->path_degrees, this->next_demands, this->allVNPaths);
+    return result;
+}
+
+solution split_option_finder::return_solution(vector<pair<int, vector<int>>> bitrateDiv){
+  vector<pair<int, vector<int>>> tempSolution = {};
+  solution result = solution();
+
+  for (int path_it = 0; path_it < bitrateDiv.size(); path_it++){
+      vector<int> tupleIndces = {};
+      for (int path_bw_it = 0; path_bw_it < bitrateDiv[path_it].second.size(); path_bw_it++) {
+          int path_dist = this->allVNPaths.paths[bitrateDiv[path_it].first].dist;
+          vector<int> tuple = reach_table_instance->get_best_tuple(path_dist, bitrateDiv[path_it].second[path_bw_it]);
+          if (tuple.size() == 0){
+                  printPy("Valid tuple for path not found-> ", debug); printPy(bitrateDiv[path_it].first, debug); printPy(" ", debug); printPy(path_dist, debug); printPy(" ", debug); printPy(bitrateDiv[path_it].second[path_bw_it], debug); printPy("\n", debug);
+                  return result;
+          }
+          tupleIndces.push_back(tuple[0]);
+      }
+      tempSolution.push_back(make_pair(bitrateDiv[path_it].first, tupleIndces));
+  }
+  result = solution_feasible(tempSolution);
+  if(debug)
+    result.print_solution();
+  return result;
+}
+
+vector<int> split_option_finder::find_next_comb(vector<int> cur, vector<int> max){
+    int size = cur.size();
+
+    for (int i = size-1; i > -1; i--) {
+        if(cur[i] == max[i]){
+            cur[i] = 0;
+        } else {
+          cur[i] += 1;
+          break;
         }
     }
 
-    result = solution(paths, tuples, starting_slices_index, slices_req, this->path_degrees, this->next_demands, this->allVNPaths);
-    return result;
+    return cur;
 }
 
 void split_option_finder::solveProtectedPaths(vector<vector<int>> paths, int index_of_path, int* numOfSlices) {
@@ -137,58 +199,50 @@ void split_option_finder::solveProtectedPaths(vector<vector<int>> paths, int ind
     int size_of_path = paths.size();
     int number_of_paths = this->allVNPaths.paths.size();
     vector<int> bitRatesVector = reach_table_instance->get_all_bit_rates_vector();
+    printPy("bit rates Vec: ", debug); printVector(bitRatesVector, debug);
     sort(bitRatesVector.begin(), bitRatesVector.end());
     vector<pair<int, vector<int>>> solutionVec = {};
-    int slices = -1;
 
     vector<vector<int>> all_divisions = intPermutationsHelper(bit_rate, reach_table_instance->get_all_bit_rates_vector(), size_of_path);
+    printPy("all divisions\n", debug); print2DVector(all_divisions, debug);
     for (int all_division_it = 0; all_division_it < all_divisions.size(); all_division_it++) {
       //FOR EACH DIVISION
-      printPy("Division: ", debug); printVector(all_divisions[all_division_it], debug);
+//      printPy("Division: ", debug); printVector(all_divisions[all_division_it], debug);
 
         vector<pair<int, int>> paths_bw = divide_and_merge(all_divisions[all_division_it], paths);
         for(int number_of_splits = paths_bw.size(); number_of_splits <= max_number_of_splits; number_of_splits++) {
         //FOR EACH POSSIBLE q <= Q
             vector<vector<int>> all_split_combinations = intPermutationsHelper(number_of_splits, {}, paths_bw.size());
+//            printPy("all split combinations\n", debug); print2DVector(all_split_combinations, debug);
             for (int split_comb_it = 0; split_comb_it < all_split_combinations.size(); split_comb_it++) {
                 printPy("Split Comb: ", debug); printVector(all_split_combinations[split_comb_it], debug);
-                vector<pair<int, vector<int>>> final_bw_div = this->calculateFinalBWDiv(paths_bw, all_split_combinations[split_comb_it], bitRatesVector);
-                vector<pair<int, vector<int>>> tempSolution = {};
-                int tempSlices = 0;
+                vector< pair<int, vector<vector<int>>> > final_bw_div = this->calculateFinalBWDiv(paths_bw, all_split_combinations[split_comb_it], bitRatesVector);
                 bool status = true;
                 if(final_bw_div.size() == 0){
                     printPy("Final BW division not found.\n", debug);
-                    status = false;
-//                    break;
+                    continue;
                 }
-                for (int path_it = 0; (path_it < final_bw_div.size()) && status; path_it++) {
-//                    printPy("entered path iterator\n", debug);
-                    vector<int> tupleIndces = {};
-                    for (int i = 0; i < final_bw_div[path_it].second.size(); i++) {
-                        int path_dist = this->allVNPaths.paths[final_bw_div[path_it].first].dist;
-                        vector<int> tuple = reach_table_instance->get_best_tuple(path_dist, final_bw_div[path_it].second[i]);
-                        if (tuple.size() == 0){
-                            printPy("Valid tuple for path not found-> ", debug); printPy(final_bw_div[path_it].first, debug); printPy(" ", debug); printPy(path_dist, debug); printPy(" ", debug); printPy(final_bw_div[path_it].second[i], debug);
-                            status = false;
-                            break;
-                        }
-//                        printVector(tuple);
-                        tupleIndces.push_back(tuple[0]);
-                        tempSlices += tuple[3];
+                vector<int> curComb = {};
+                vector<int> maxComb = {};
+                int totalComb = 1;
+                for (int i = 0; i < final_bw_div.size(); i++) {
+                  totalComb *= final_bw_div[i].second.size();
+                  curComb.push_back(0);
+                  maxComb.push_back(final_bw_div[i].second.size()-1);
+                }
+                printPy("max comb: ", debug); printVector(maxComb, debug);
+                for (int i = 0; i < totalComb; i++) {
+//                    cout << index_of_path << " " << all_division_it << "/" << all_divisions.size() << " " << number_of_splits << " " << split_comb_it << "/" << all_split_combinations.size() << " " << i << "/" << totalComb << endl;
+                    printPy("cur comb: ", debug); printVector(curComb, debug);
+                    vector<pair<int, vector<int>>> selectedComb = {};
+                    for (int j = 0; j < curComb.size(); j++) {
+                        selectedComb.push_back(make_pair(final_bw_div[j].first, final_bw_div[j].second[curComb[j]]));
+                        printPy("path: ", debug); printPy(final_bw_div[j].first, debug); printPy(" ", debug); printPy("bitrates: ", debug); printVector(final_bw_div[j].second[curComb[j]], debug);
                     }
-                    tempSolution.push_back(make_pair(final_bw_div[path_it].first, tupleIndces));
-                }
-                if(status){
-//                    if (slices == -1 || tempSlices < slices) {
-                    printPy("found a candidate solution\n", debug);
-                    solution newSolution = this->solution_feasible(tempSolution);
-                    if (newSolution.get_needed_slices()>0){
-                        printPy("***************new solution found! updating...\n", debug);
+                    solution newSolution = return_solution(selectedComb);
+                    if(newSolution.get_needed_slices() != -1)
                         this->vnSolutions[index_of_path].push_back(newSolution);
-                        slices = tempSlices;
-//                          printPy("Naaaaaaaaaaaaaaaaaaaaaaaaa\n");
-                    }
-//                }
+                    curComb = find_next_comb(curComb, maxComb);
                 }
             }
         }

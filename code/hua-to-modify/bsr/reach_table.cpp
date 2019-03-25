@@ -233,14 +233,13 @@ int reach_table::get_bit_rate_index(int bit_rate) {
 
 vector<int> reach_table::get_best_tuple(int distance, int data_rate) {
     int min_slices_needed = 10000;
-    map<int, int>::iterator it = tuple_bit_rate_to_first_index.find(data_rate);
+    map<int, int>::iterator it = tuple_bit_rate_to_first_index.lower_bound(data_rate);
     if(it == tuple_bit_rate_to_first_index.end())
         return vector<int> (0);
-
     int index = it->second;
     int best_index = -1;
 
-    while(index < tuples.size() && tuples[index][1] == data_rate) {
+    while(index < tuples.size() && tuples[index][1] >= data_rate) {
         if(tuples[index][2] >= distance && min_slices_needed >= tuples[index][3]) {
             best_index = index;
             min_slices_needed = tuples[index][3];

@@ -19,8 +19,8 @@
 #include "basic_functions.cpp"
 using namespace std;
 
-#define MAX_CH 12
-//#define MAX_CH 48
+//#define MAX_CH 12
+#define MAX_CH 48
 
 const int NUMBER_OF_PHYSICAL_SLICES = MAX_CH;
 
@@ -54,10 +54,12 @@ private:
 
     void solveProtectedPaths(vector<vector<int>> paths, int index_of_path, int* numOfSlices);
     vector<pair<int, int>> divide_and_merge(vector<int> division, vector<vector<int>> paths);
-    vector<pair<int, vector<int>>> calculateFinalBWDiv(vector<pair<int, int>> paths_bw, vector<int> split_comb, vector<int> bit_rates);
+    vector<pair<int, vector<vector<int>>> > calculateFinalBWDiv(vector<pair<int, int>> paths_bw, vector<int> split_comb, vector<int> bit_rates);
     solution solution_feasible(vector<pair<int, vector<int>>> solution);
     bool is_available(int start, int num, bitset<NUMBER_OF_PHYSICAL_SLICES> pathSlices);
     int firstFitAllocationConsideringAdjacentPaths(int pathId, int slicesReq, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> pathSlices, vector<int> adjPaths);
+    solution return_solution(vector<pair<int, vector<int>>> bitrateDiv);
+    vector<int> find_next_comb(vector<int> cur, vector<int> max);
 
 public:
     /*

@@ -34,5 +34,6 @@ vector<vector<int>> intPermutations(int min, int base, int sum);
 
 int findPairInVector(vector<pair<int, int>> vec, int key);
 int findIndexOfNextInVector(vector<int> vec, int val);
+vector<vector<int>> remove_repition_in_vector(vector<vector<int>> set);
 
 #endif

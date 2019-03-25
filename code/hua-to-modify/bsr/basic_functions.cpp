@@ -129,4 +129,44 @@ int findPairInVector(vector<pair<int, int>> vec, int key){
 	return -1;
 }
 
+bool is_in_vector(int a, vector<int> b){
+	for(int i = 0; i < b.size(); i++){
+		if (a == b[i])
+			return true;
+	}
+
+	return false;
+}
+
+bool are_vec_equal(vector<int> one, vector<int> two){
+	if(one.size() != two.size())
+		return false;
+
+	bool status = true;
+	int size = one.size();
+
+	for(int i = 0; i < size; i++){
+		status = status && is_in_vector(one[i], two);
+	}
+
+	return status;
+}
+
+vector<vector<int>> remove_repition_in_vector(vector<vector<int>> set){
+	int size = set.size();
+	int i = 0;
+
+	while(i < size){
+			for(int j = i+1; j < size; j++){
+				if (are_vec_equal(set[i], set[j])){
+					set.erase(set.begin()+i);
+					i--;
+					size--;
+					break;
+				}
+			}
+			i++;
+	}
+	return set;
+}
 #endif

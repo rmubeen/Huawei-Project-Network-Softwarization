@@ -6,7 +6,7 @@ clear
 for cases in 0 1 2
 do
 	mkdir $2/case$cases
-	for bsrVal in {10..100..10}
+	for bsrVal in {20..100..20}
 	do
 		mkdir $2/case$cases/bsr$bsrVal
 		for vnid in 0 1 2 3 4
@@ -39,4 +39,3 @@ done
 # ./vneprotection/vne_protection --pn_topology_file=vneprotection/data/test1/test_p	n.topo --vn_topology_file=vneprotection/data/test1/test_vn.topo
 
 # this does not work
-

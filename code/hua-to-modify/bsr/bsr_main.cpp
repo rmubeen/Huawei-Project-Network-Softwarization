@@ -15,7 +15,7 @@ using namespace std;
 
 #define Q 8 //max number of slices
 #define K 25 //k shortest path
-#define TABLE_PATH "input/ONE_varyingmod-varyingfec.csv"
+#define TABLE_PATH "input/ONE_v1.csv"
 
 void setVLinkIDsInProtectedPathsOfVN(vector<vector<int>> vnLinks, protectedPathsOfVN_C* VNPaths){
 	for (int i = 0; i < vnLinks.size(); i++) {
@@ -99,10 +99,11 @@ int main(int argc, char * argv[]){
 		//GETING DATA FOR THIS VN//
     int vlink_index = vn.vlink_order[vlink_it];
     int vlink_id = vn.vlinks[vlink_index][0];
-//			cout << "\nvlink src/dst: " << vn.vlinks[vlink_index][1] << " " << vn.vlinks[vlink_index][2] << endl;
+		cout << "\nvlink src/dst: " << vn.vlinks[vlink_index][1] << " " << vn.vlinks[vlink_index][2] << endl;
 		printPy("vLink ID: ", DEBUG); printPy(vlink_id, DEBUG); printPy("\n", DEBUG);
     int bit_rate = vn.vlinks[vlink_index][3];
     protectedPathsOfPair_S vlink_paths = VNPaths->getPathsOfVLink(vlink_id);
+		cout << "number of protected paths set: " << vlink_paths.protectedPathsSet.size() << endl;
     vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> current_vlink_path_slices;
 		vector<vector<int>> path_degrees;
 		vector<vector<int>> adj_list;
@@ -143,6 +144,8 @@ int main(int argc, char * argv[]){
 
 		vnSol.print_solution();
 
+
+
 		//UPDATING COST VARIABLE//
 		cost += vnSol.get_needed_slices();
 //		cost += vnSol->get_paths().size() * 0.1;
@@ -153,6 +156,7 @@ int main(int argc, char * argv[]){
 		vector<vector<int>> slices_req = vnSol.get_req_slices();
 //		print2DVector(adj_list);
 		for(int i = 0; i < paths.size(); i++) {
+				cout << "dist: " << vlink_paths.paths[paths[i]].dist << endl;
 				int path_index = paths[i] + starting_path_index;
 //				cout << path_index << endl;
 //				printVector(vn.adjacency_list[path_index]);
@@ -171,6 +175,7 @@ int main(int argc, char * argv[]){
 		for (int i = starting_path_index; i < ending_path_index && DEBUG; i++) {
 				cout << path_slices[i] << endl;
 		}
+//		break;
   }
 	time_t t2 = time(NULL);
 
