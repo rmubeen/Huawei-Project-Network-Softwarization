@@ -15,7 +15,7 @@ using namespace std;
 
 #define Q 8 //max number of slices
 #define K 25 //k shortest path
-#define TABLE_PATH "input/ONE_v1.csv"
+#define TABLE_PATH "input/fix.csv"
 
 void setVLinkIDsInProtectedPathsOfVN(vector<vector<int>> vnLinks, protectedPathsOfVN_C* VNPaths){
 	for (int i = 0; i < vnLinks.size(); i++) {
@@ -33,6 +33,7 @@ int main(int argc, char * argv[]){
   string vn_topology_filename = "";
   string location_constraint_filename = "";
 	string output_filename = "";
+	string logFileName = "";
 	double bsr_value = 1.0;
   for (auto argument : *arg_map) {
       if (argument.first == "--pn_topology_file") {
@@ -43,6 +44,7 @@ int main(int argc, char * argv[]){
           location_constraint_filename = argument.second;
 			} else if (argument.first == "--output") {
           output_filename = argument.second;
+					logFileName = output_filename + ".log";
       } else if (argument.first == "--debug") {
 						if (argument.second == "main") {
 								DEBUG = true;
@@ -158,17 +160,19 @@ int main(int argc, char * argv[]){
 		for(int i = 0; i < paths.size(); i++) {
 				cout << "dist: " << vlink_paths.paths[paths[i]].dist << endl;
 				int path_index = paths[i] + starting_path_index;
-//				cout << path_index << endl;
-//				printVector(vn.adjacency_list[path_index]);
+
 				for (int j = 0; j < starting_slices[i].size(); j++) {
 						for(int k = 0; k < slices_req[i][j]; k++){
-								path_slices[path_index].set(starting_slices[i][j] + k);
 
-								for (int l = 0; l < adj_list[path_index-starting_path_index].size(); l++){
-										path_slices[l+starting_path_index].set(starting_slices[i][j] + k);
+								path_slices[path_index].set(starting_slices[i][j] + k);
+								for (int l = 0; l < vn.adjacency_list[path_index].size(); l++){
+										int adj_index = vn.adjacency_list[path_index][l];
+										path_slices[adj_index].set(starting_slices[i][j] + k);
 								}
+
 						}
 				}
+
 		}
 
 		//PRINTING UPDATED PATH SLICES//

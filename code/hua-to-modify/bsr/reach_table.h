@@ -14,8 +14,8 @@
 
 using namespace std;
 
-//#define slice_width 50
-#define slice_width 12.5
+#define slice_width 50
+//#define slice_width 12.5
 
 
 // reach_table class deals with the reading and storing the reach_table (tuples).

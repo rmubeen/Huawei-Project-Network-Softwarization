@@ -92,11 +92,30 @@ path_S protectedPathsOfVN_C::parseInputLine(string line){
 	return thisLine;
 }
 
+string protectedPathsOfVN_C::reverseLink(string link){
+	string revLink = "";
+	string temp = "";
+	for(int i = 0; i <link.size(); i++){
+
+		if(link[i] == '-'){
+			link.erase(link.begin(), link.begin()+i+1);
+			break;
+		} else {
+			temp += link[i];
+		}
+
+	}
+	revLink = link + '-' + temp;
+	return revLink;
+}
+
 bool protectedPathsOfVN_C::isDisjoint(path_S one, path_S two){
 	bool status = true;
 	for(int i = 0; i < one.links.size(); i++){
 		for(int j = 0; j < two.links.size(); j++){
 			if(one.links[i] == two.links[j])
+				status = false;
+			if(this->reverseLink(one.links[i]) == two.links[j])
 				status = false;
 		}
 	}

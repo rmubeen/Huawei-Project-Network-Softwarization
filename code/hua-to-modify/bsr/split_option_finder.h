@@ -19,8 +19,8 @@
 #include "basic_functions.cpp"
 using namespace std;
 
-//#define MAX_CH 12
-#define MAX_CH 48
+#define MAX_CH 12
+//#define MAX_CH 48
 
 const int NUMBER_OF_PHYSICAL_SLICES = MAX_CH;
 

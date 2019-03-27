@@ -50,7 +50,6 @@ vector<pair<int, int>> split_option_finder::divide_and_merge(vector<int> divisio
 	}
 
   vector<int> all_bit_rates = reach_table_instance->get_all_bit_rates_vector();
-  sort(all_bit_rates.begin(), all_bit_rates.end());
   for (int i = 0; i < bwDiv.size(); i++) {
     if(find(all_bit_rates.begin(), all_bit_rates.end(), bwDiv[i].second) == all_bit_rates.end()){
       bwDiv[i].second = all_bit_rates[findIndexOfNextInVector(all_bit_rates, bwDiv[i].second)];
@@ -200,12 +199,12 @@ void split_option_finder::solveProtectedPaths(vector<vector<int>> paths, int ind
     int number_of_paths = this->allVNPaths.paths.size();
     vector<int> bitRatesVector = reach_table_instance->get_all_bit_rates_vector();
     printPy("bit rates Vec: ", debug); printVector(bitRatesVector, debug);
-    sort(bitRatesVector.begin(), bitRatesVector.end());
     vector<pair<int, vector<int>>> solutionVec = {};
 
     vector<vector<int>> all_divisions = intPermutationsHelper(bit_rate, reach_table_instance->get_all_bit_rates_vector(), size_of_path);
     printPy("all divisions\n", debug); print2DVector(all_divisions, debug);
     for (int all_division_it = 0; all_division_it < all_divisions.size(); all_division_it++) {
+      int min_slices_for_certain_division = 100000;
       //FOR EACH DIVISION
 //      printPy("Division: ", debug); printVector(all_divisions[all_division_it], debug);
 
@@ -240,8 +239,10 @@ void split_option_finder::solveProtectedPaths(vector<vector<int>> paths, int ind
                         printPy("path: ", debug); printPy(final_bw_div[j].first, debug); printPy(" ", debug); printPy("bitrates: ", debug); printVector(final_bw_div[j].second[curComb[j]], debug);
                     }
                     solution newSolution = return_solution(selectedComb);
-                    if(newSolution.get_needed_slices() != -1)
+                    if((newSolution.get_needed_slices() != -1) && (newSolution.get_needed_slices() < min_slices_for_certain_division)){
+                        min_slices_for_certain_division = newSolution.get_needed_slices();
                         this->vnSolutions[index_of_path].push_back(newSolution);
+                    }
                     curComb = find_next_comb(curComb, maxComb);
                 }
             }
@@ -287,14 +288,14 @@ split_option_finder::split_option_finder(bool DBG, double bsr_value, int Q, int 
   bool optimalSolutionSet = false;
 
   for(int i = 0; i < this->vnSolutions.size(); i++){
-      for (int j = 0; j < this->vnSolutions[i].size(); j++) {
+    if(this->vnSolutions[i].size() > 0){
         if(!optimalSolutionSet){
-          this->optimalSolution = this->vnSolutions[i][j];
-          optimalSolutionSet = true;
-        } else if(this->vnSolutions[i][j].get_needed_slices() < this->optimalSolution.get_needed_slices()){
-          this->optimalSolution = this->vnSolutions[i][j];
+            this->optimalSolution = this->vnSolutions[i][0];
+            optimalSolutionSet = true;
+        } else if(this->vnSolutions[i][0].get_needed_slices() < this->optimalSolution.get_needed_slices()){
+            this->optimalSolution = this->vnSolutions[i][0];
         }
-      }
+    }
   }
 
 }

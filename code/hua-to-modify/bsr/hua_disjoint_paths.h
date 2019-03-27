@@ -62,6 +62,7 @@ private:
 	void printProtectedPathsOfPair(protectedPathsOfPair_S paths, ofstream& outfile);
 	void printPath(path_S path, ofstream& outfile);
 	void printVector(vector<int> vec, ofstream& outfile);
+	string reverseLink(string link);
 
 public:
 	protectedPathsOfVN_C(string filename, int kOfProtectedPaths, int maxSizeOfDisjointSet);
