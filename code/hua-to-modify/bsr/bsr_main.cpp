@@ -33,7 +33,7 @@ int main(int argc, char * argv[]){
   string vn_topology_filename = "";
   string location_constraint_filename = "";
 	string output_filename = "";
-	string logFileName = "";
+	string logFileName = "temp.log";
 	double bsr_value = 1.0;
   for (auto argument : *arg_map) {
       if (argument.first == "--pn_topology_file") {
@@ -69,6 +69,7 @@ int main(int argc, char * argv[]){
   printPy(location_constraint_filename + " \t<- constraint\n", DEBUG);
   printPy(protected_path_output_file + " \t<- protected path output\n", DEBUG);
 	printPy(output_filename + " \t<- output\n", DEBUG);
+	printPy(logFileName + " \t<- log\n", DEBUG);
 	printPy(bsr_value, DEBUG); printPy(" \t<- BSR Value\n", DEBUG);
 
 	//PREPARING INITIAL DATA//
@@ -89,9 +90,10 @@ int main(int argc, char * argv[]){
 		VNPaths->printStats();
 
 	//INITIALIZING COST AND PATHS//
+	ofstream fout; fout.open(logFileName);
 	time_t t1 = time(NULL);
-	printPy("\n");
-	printPy(t1-t0); printPy(" second(s) taken for initialization\n");
+	fout << "\n";
+	fout << t1-t0 << " second(s) taken for initialization\n";
 	double cost = 0;
   vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> path_slices(vn.shortest_paths.size(), bitset<NUMBER_OF_PHYSICAL_SLICES> (0));
 
@@ -101,11 +103,11 @@ int main(int argc, char * argv[]){
 		//GETING DATA FOR THIS VN//
     int vlink_index = vn.vlink_order[vlink_it];
     int vlink_id = vn.vlinks[vlink_index][0];
-		cout << "\nvlink src/dst: " << vn.vlinks[vlink_index][1] << " " << vn.vlinks[vlink_index][2] << endl;
+		fout << "\nvlink src/dst: " << vn.vlinks[vlink_index][1] << " " << vn.vlinks[vlink_index][2] << endl;
 		printPy("vLink ID: ", DEBUG); printPy(vlink_id, DEBUG); printPy("\n", DEBUG);
     int bit_rate = vn.vlinks[vlink_index][3];
     protectedPathsOfPair_S vlink_paths = VNPaths->getPathsOfVLink(vlink_id);
-		cout << "number of protected paths set: " << vlink_paths.protectedPathsSet.size() << endl;
+		fout << "number of protected paths set: " << vlink_paths.protectedPathsSet.size() << endl;
     vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> current_vlink_path_slices;
 		vector<vector<int>> path_degrees;
 		vector<vector<int>> adj_list;
@@ -139,12 +141,12 @@ int main(int argc, char * argv[]){
 		//GETING SOLUTION OF ABOVE SOLVER//
 		solution vnSol = solver.get_optimal_solution();
 		if(vnSol.get_needed_slices() == -1) {
-				cout << "NO Solution ----> " << vlink_it <<"/"<<vn.vlink_order.size()<< endl;
+				fout << "NO Solution ----> " << vlink_it <<"/"<<vn.vlink_order.size()<< endl;
 				if (vlink_paths.protectedPathsSet.size() > 0)
 						return 1;
 		}
 
-		vnSol.print_solution();
+		vnSol.print_solution(fout);
 
 
 
@@ -158,7 +160,7 @@ int main(int argc, char * argv[]){
 		vector<vector<int>> slices_req = vnSol.get_req_slices();
 //		print2DVector(adj_list);
 		for(int i = 0; i < paths.size(); i++) {
-				cout << "dist: " << vlink_paths.paths[paths[i]].dist << endl;
+				fout << "dist: " << vlink_paths.paths[paths[i]].dist << endl;
 				int path_index = paths[i] + starting_path_index;
 
 				for (int j = 0; j < starting_slices[i].size(); j++) {
@@ -183,9 +185,10 @@ int main(int argc, char * argv[]){
   }
 	time_t t2 = time(NULL);
 
-	printPy(t2-t1); printPy(" second(s) taken for solution\n");
-	printPy(t2-t0); printPy(" second(s) taken in total\n");
-	printPy("cost = "); printPy(cost); printPy("\n\n");
+	fout <<(t2-t1) << " second(s) taken for solution\n";
+	fout <<(t2-t0) << " second(s) taken in total\n";
+	fout <<"cost = " << cost << "\n\n";
+	fout.close();
 
 	if(output_filename == ""){
 			printPy("NO OUTPUT FILE MENTIONED\n\n");

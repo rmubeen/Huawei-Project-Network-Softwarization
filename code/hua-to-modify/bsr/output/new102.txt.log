@@ -1,0 +1,70 @@
+
+0 second(s) taken for initialization
+
+vlink src/dst: 0 2
+number of protected paths set: 15
+paths: {0 1}
+slices required:
+{2}
+{2}
+slices start:
+{0}
+{0}
+tuples:
+{18}
+{18}
+path needs: {4 6}
+dist: 262
+dist: 276
+
+vlink src/dst: 0 3
+number of protected paths set: 255
+paths: {0 1}
+slices required:
+{1}
+{1}
+slices start:
+{2}
+{0}
+tuples:
+{14}
+{13}
+path needs: {1 3}
+dist: 163
+dist: 339
+
+vlink src/dst: 1 3
+number of protected paths set: 255
+paths: {0 18}
+slices required:
+{1}
+{1}
+slices start:
+{2}
+{3}
+tuples:
+{11}
+{6}
+path needs: {5 5}
+dist: 550
+dist: 896
+
+vlink src/dst: 0 1
+number of protected paths set: 255
+paths: {1 8}
+slices required:
+{2}
+{2}
+slices start:
+{3}
+{0}
+tuples:
+{17}
+{16}
+path needs: {6 8}
+dist: 553
+dist: 733
+20 second(s) taken for solution
+20 second(s) taken in total
+cost = 38
+

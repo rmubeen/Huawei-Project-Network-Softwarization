@@ -5,6 +5,7 @@
 #ifndef HUA_TO_MODIFY_SOLUTION_H
 #define HUA_TO_MODIFY_SOLUTION_H
 
+#include <fstream>
 #include <vector>
 #include "reach_table.h"
 #include "basic_functions.cpp"
@@ -122,6 +123,21 @@ public:
       printVector(path_needs);
 
     }
+
+    void print_solution(ofstream& fout){
+      fout<<"paths: ";
+      printVector(paths, fout);
+      fout<<"slices required:\n";
+      print2DVector(slices_req, fout);
+      fout<<"slices start:\n";
+      print2DVector(slices_start, fout);
+      fout<<"tuples:\n";
+      print2DVector(tuples, fout);
+      fout<<"path needs: ";
+      printVector(path_needs, fout);
+
+    }
+
 };
 
 

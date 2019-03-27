@@ -44,6 +44,24 @@ void print2DVector(vector<vector<T1>> vec, bool status){
 	}
 }
 
+template <class TPVVF>
+void printVector(vector<TPVVF> vec, ofstream& fout){
+	fout << "{";
+	for(int i = 0; i < vec.size(); i++){
+		fout << vec[i];
+		if (i != vec.size()-1)
+			fout << " ";
+	}
+	fout << "}\n";
+}
+
+template <class TP2DVVF>
+void print2DVector(vector<vector<TP2DVVF>> vec, ofstream& fout){
+	for (int i = 0; i < vec.size(); i++) {
+		printVector(vec[i], fout);
+	}
+}
+
 int strToInt(string str){
 	int number = 0;
 
