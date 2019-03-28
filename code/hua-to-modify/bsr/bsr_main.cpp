@@ -79,7 +79,7 @@ int main(int argc, char * argv[]){
 	printPy("Converter Instance Defined\n", DEBUG);
   reach_table reach_table_instance(TABLE_PATH, Q, K);
 	printPy("Reach Table Instance Defined\n", DEBUG);
-	protectedPathsOfVN_C* VNPaths = new protectedPathsOfVN_C(paths_file, 4, 5);
+	protectedPathsOfVN_C* VNPaths = new protectedPathsOfVN_C(paths_file, 4, 5); // Arguments: First-> Path File, Second->
 	printPy("VN Disjoint Paths Done\n", DEBUG);
 	setVLinkIDsInProtectedPathsOfVN(vn.vlinks, VNPaths);
 	printPy("VLinks IDs Set\n", DEBUG);
@@ -135,7 +135,7 @@ int main(int argc, char * argv[]){
 		}
 
 		//SOLVING THIS VN//
-    split_option_finder solver(allDebug, bsr_value, Q, bit_rate, current_vlink_path_slices,
+    split_option_finder solver(allDebug, K, bsr_value, Q, bit_rate, current_vlink_path_slices,
                               vlink_paths, &reach_table_instance, path_degrees, next_demands, adj_list);
 
 		//GETING SOLUTION OF ABOVE SOLVER//
@@ -156,25 +156,19 @@ int main(int argc, char * argv[]){
 
 		//UPDATING PATH SLICES//
 		vector<int> paths = vnSol.get_paths();
-		vector<vector<int>> starting_slices = vnSol.get_starting_slices();
-		vector<vector<int>> slices_req = vnSol.get_req_slices();
+		vector<int> starting_slices = vnSol.get_starting_slices();
+		vector<int> slices_req = vnSol.get_req_slices();
 //		print2DVector(adj_list);
 		for(int i = 0; i < paths.size(); i++) {
 				fout << "dist: " << vlink_paths.paths[paths[i]].dist << endl;
 				int path_index = paths[i] + starting_path_index;
-
-				for (int j = 0; j < starting_slices[i].size(); j++) {
-						for(int k = 0; k < slices_req[i][j]; k++){
-
-								path_slices[path_index].set(starting_slices[i][j] + k);
-								for (int l = 0; l < vn.adjacency_list[path_index].size(); l++){
-										int adj_index = vn.adjacency_list[path_index][l];
-										path_slices[adj_index].set(starting_slices[i][j] + k);
-								}
-
+				for(int k = 0; k < slices_req[i]; k++){
+						path_slices[path_index].set(starting_slices[i] + k);
+						for (int l = 0; l < vn.adjacency_list[path_index].size(); l++){
+								int adj_index = vn.adjacency_list[path_index][l];
+								path_slices[adj_index].set(starting_slices[i] + k);
 						}
 				}
-
 		}
 
 		//PRINTING UPDATED PATH SLICES//

@@ -45,6 +45,9 @@ private:
     solution optimalSolution;
     bool debug;
     double bsr_value;
+    vector<int> all_bit_rates;
+
+    vector<vector<vector<int>>> dynamic_table;
 
     /*
      * find the first place (first-fit) that there exists needed_slices number of contiguous unused slices in this path.
@@ -55,10 +58,10 @@ private:
     void solveProtectedPaths(vector<vector<int>> paths, int index_of_path, int* numOfSlices);
     vector<pair<int, int>> divide_and_merge(vector<int> division, vector<vector<int>> paths);
     vector<pair<int, vector<vector<int>>> > calculateFinalBWDiv(vector<pair<int, int>> paths_bw, vector<int> split_comb, vector<int> bit_rates);
-    solution solution_feasible(vector<pair<int, vector<int>>> solution);
+    solution solution_feasible(vector<pair<int, int>> solutionVec, int needed_slices);
     bool is_available(int start, int num, bitset<NUMBER_OF_PHYSICAL_SLICES> pathSlices);
     int firstFitAllocationConsideringAdjacentPaths(int pathId, int slicesReq, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> pathSlices, vector<int> adjPaths);
-    solution return_solution(vector<pair<int, vector<int>>> bitrateDiv);
+    solution return_solution(vector<pair<int, vector<int>>> bitrateDiv, int cur_min);
     vector<int> find_next_comb(vector<int> cur, vector<int> max);
 
 public:
@@ -72,7 +75,7 @@ public:
      *
      * And call the solve_dp function to solve the problem for this vlink.
      */
-      split_option_finder(bool DBG, double bsr_value, int Q, int bit_rate, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> slices, protectedPathsOfPair_S paths, reach_table *reach_table_ins, vector<vector<int>> path_degrees, vector<int> next_demands, vector<vector<int>> adj_list);
+      split_option_finder(bool DBG, int K, double bsr_value, int Q, int bit_rate, vector<bitset<NUMBER_OF_PHYSICAL_SLICES>> slices, protectedPathsOfPair_S paths, reach_table *reach_table_ins, vector<vector<int>> path_degrees, vector<int> next_demands, vector<vector<int>> adj_list);
 
       vector<vector<solution>> get_solutions(){
           return this->vnSolutions;
