@@ -1,0 +1,287 @@
+
+5 second(s) taken for initialization
+
+vlink src/dst: 6 14
+number of protected paths set: 15
+needed_slices: 22
+paths: {1 6}
+slices required:
+{2 2}
+slices start:
+{0 0}
+tuples:
+{12 12}
+dist: 360
+dist: 447
+
+vlink src/dst: 7 13
+number of protected paths set: 15
+needed_slices: 26
+paths: {0 12}
+slices required:
+{2 2}
+slices start:
+{2 2}
+tuples:
+{12 12}
+dist: 599
+dist: 734
+
+vlink src/dst: 3 11
+number of protected paths set: 15
+needed_slices: 22
+paths: {0 8}
+slices required:
+{2 2}
+slices start:
+{4 4}
+tuples:
+{12 12}
+dist: 443
+dist: 546
+
+vlink src/dst: 5 17
+number of protected paths set: 3
+needed_slices: 12
+paths: {0 1}
+slices required:
+{2 2}
+slices start:
+{2 6}
+tuples:
+{20 20}
+dist: 110
+dist: 207
+
+vlink src/dst: 11 14
+number of protected paths set: 15
+needed_slices: 60
+paths: {0 0 2 4 4}
+slices required:
+{2 4 2 2 2}
+slices start:
+{8 10 0 2 4}
+tuples:
+{12 34 12 12 12}
+dist: 396
+dist: 396
+dist: 450
+dist: 462
+dist: 462
+
+vlink src/dst: 15 17
+number of protected paths set: 3
+needed_slices: 32
+paths: {0 16}
+slices required:
+{2 2}
+slices start:
+{6 8}
+tuples:
+{12 12}
+dist: 408
+dist: 665
+
+vlink src/dst: 4 6
+number of protected paths set: 15
+needed_slices: 71
+paths: {0 0 0 12 15 15}
+slices required:
+{2 2 3 2 2 2}
+slices start:
+{10 12 14 8 0 6}
+tuples:
+{12 12 18 12 12 12}
+dist: 405
+dist: 405
+dist: 405
+dist: 558
+dist: 635
+dist: 635
+
+vlink src/dst: 3 5
+number of protected paths set: 15
+needed_slices: 36
+paths: {0 0 5 5}
+slices required:
+{2 2 2 2}
+slices start:
+{14 16 17 19}
+tuples:
+{12 12 12 12}
+dist: 334
+dist: 334
+dist: 437
+dist: 437
+
+vlink src/dst: 7 18
+number of protected paths set: 15
+needed_slices: 46
+paths: {0 12 12}
+slices required:
+{3 2 2}
+slices start:
+{10 18 20}
+tuples:
+{18 12 12}
+dist: 490
+dist: 707
+dist: 707
+
+vlink src/dst: 12 16
+number of protected paths set: 3
+needed_slices: 30
+paths: {2 17}
+slices required:
+{2 2}
+slices start:
+{6 22}
+tuples:
+{12 12}
+dist: 600
+dist: 752
+
+vlink src/dst: 9 12
+number of protected paths set: 15
+needed_slices: 54
+paths: {0 0 0 2 2 2}
+slices required:
+{2 2 2 2 2 2}
+slices start:
+{2 4 10 10 12 14}
+tuples:
+{12 12 12 12 12 12}
+dist: 513
+dist: 513
+dist: 513
+dist: 550
+dist: 550
+dist: 550
+
+vlink src/dst: 1 13
+number of protected paths set: 15
+needed_slices: 26
+paths: {0 1}
+slices required:
+{2 2}
+slices start:
+{16 0}
+tuples:
+{12 12}
+dist: 762
+dist: 772
+
+vlink src/dst: 0 19
+number of protected paths set: 15
+needed_slices: 36
+paths: {0 11 13}
+slices required:
+{2 2 2}
+slices start:
+{8 6 4}
+tuples:
+{12 12 12}
+dist: 434
+dist: 684
+dist: 732
+
+vlink src/dst: 9 15
+number of protected paths set: 3
+needed_slices: 18
+paths: {1 2}
+slices required:
+{2 2}
+slices start:
+{2 18}
+tuples:
+{12 12}
+dist: 360
+dist: 425
+
+vlink src/dst: 10 16
+number of protected paths set: 3
+needed_slices: 78
+paths: {0 0 0 3 3 3}
+slices required:
+{2 2 2 2 2 2}
+slices start:
+{2 4 13 20 22 24}
+tuples:
+{12 12 12 12 12 12}
+dist: 453
+dist: 453
+dist: 453
+dist: 539
+dist: 539
+dist: 539
+
+vlink src/dst: 1 4
+number of protected paths set: 15
+needed_slices: 14
+paths: {0 5}
+slices required:
+{2 2}
+slices start:
+{18 2}
+tuples:
+{12 12}
+dist: 380
+dist: 489
+
+vlink src/dst: 0 8
+number of protected paths set: 3
+needed_slices: 30
+paths: {1 3}
+slices required:
+{3 3}
+slices start:
+{6 10}
+tuples:
+{17 17}
+dist: 527
+dist: 537
+
+vlink src/dst: 2 10
+number of protected paths set: 3
+needed_slices: 24
+paths: {1 13}
+slices required:
+{2 2}
+slices start:
+{6 15}
+tuples:
+{12 12}
+dist: 630
+dist: 790
+
+vlink src/dst: 2 19
+number of protected paths set: 15
+needed_slices: 12
+paths: {0 0 1 1}
+slices required:
+{2 2 2 2}
+slices start:
+{0 2 0 2}
+tuples:
+{20 20 20 20}
+dist: 167
+dist: 167
+dist: 250
+dist: 250
+
+vlink src/dst: 8 18
+number of protected paths set: 3
+needed_slices: 16
+paths: {1 6}
+slices required:
+{2 2}
+slices start:
+{8 9}
+tuples:
+{12 12}
+dist: 538
+dist: 628
+8 second(s) taken for solution
+13 second(s) taken in total
+cost = 665
+

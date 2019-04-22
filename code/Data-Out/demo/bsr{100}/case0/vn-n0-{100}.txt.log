@@ -1,0 +1,46 @@
+
+
+
+vlink src/dst: 0 3
+paths: {0 1 1}
+slices occupied:
+{3 2 2}
+slices start:
+{0 0 2}
+tuples:
+{36 20 20}
+
+
+vlink src/dst: 1 3
+paths: {0 0 0 0 1 1 1 1}
+slices occupied:
+{2 2 2 3 2 2 2 6}
+slices start:
+{0 2 4 6 0 2 4 6}
+tuples:
+{20 20 20 27 12 12 12 39}
+
+
+vlink src/dst: 0 2
+paths: {0 0 0 0 2 2 2 2}
+slices occupied:
+{2 2 2 3 2 2 2 6}
+slices start:
+{4 6 8 10 12 14 16 18}
+tuples:
+{20 20 20 27 12 12 12 39}
+
+
+vlink src/dst: 2 3
+paths: {0 0 2 2}
+slices occupied:
+{2 2 2 2}
+slices start:
+{13 15 24 26}
+tuples:
+{20 20 12 12}
+34 second(s) taken for solution
+
+
+cost = 139
+

@@ -1,0 +1,488 @@
+
+3 second(s) taken for initialization
+
+vlink src/dst: 8 19
+number of protected paths set: 15
+needed_slices: 36
+paths: {0 12 15}
+slices required:
+{2 2 2}
+slices start:
+{0 0 0}
+tuples:
+{20 12 12}
+dist: 287
+dist: 562
+dist: 758
+
+vlink src/dst: 2 13
+number of protected paths set: 3
+needed_slices: 104
+paths: {0 0 1 1 6 6 19 19}
+slices required:
+{2 2 2 2 2 2 2 2}
+slices start:
+{2 4 6 8 6 8 2 4}
+tuples:
+{12 12 12 12 12 12 12 12}
+dist: 417
+dist: 417
+dist: 492
+dist: 492
+dist: 558
+dist: 558
+dist: 632
+dist: 632
+
+vlink src/dst: 6 13
+number of protected paths set: 3
+needed_slices: 72
+paths: {1 1 19 19 19}
+slices required:
+{2 3 2 2 2}
+slices start:
+{10 12 10 12 14}
+tuples:
+{12 17 12 12 12}
+dist: 508
+dist: 508
+dist: 721
+dist: 721
+dist: 721
+
+vlink src/dst: 7 17
+number of protected paths set: 15
+needed_slices: 27
+paths: {0 2}
+slices required:
+{3 3}
+slices start:
+{16 2}
+tuples:
+{27 27}
+dist: 284
+dist: 365
+
+vlink src/dst: 1 13
+number of protected paths set: 3
+needed_slices: 51
+paths: {0 0 0 1 1 1 1}
+slices required:
+{2 2 4 2 2 2 3}
+slices start:
+{19 21 23 19 21 23 25}
+tuples:
+{20 20 43 20 20 20 28}
+dist: 136
+dist: 136
+dist: 136
+dist: 180
+dist: 180
+dist: 180
+dist: 180
+
+vlink src/dst: 15 17
+number of protected paths set: 15
+needed_slices: 52
+paths: {0 0 1 1 18}
+slices required:
+{2 3 2 3 2}
+slices start:
+{28 30 16 28 5}
+tuples:
+{20 27 20 27 12}
+dist: 208
+dist: 208
+dist: 274
+dist: 274
+dist: 601
+
+vlink src/dst: 7 8
+number of protected paths set: 15
+needed_slices: 54
+paths: {0 0 0 0 1 1 1 1}
+slices required:
+{2 2 2 3 2 2 2 3}
+slices start:
+{33 35 37 39 7 9 11 13}
+tuples:
+{20 20 20 27 20 20 20 27}
+dist: 220
+dist: 220
+dist: 220
+dist: 220
+dist: 275
+dist: 275
+dist: 275
+dist: 275
+
+vlink src/dst: 8 15
+number of protected paths set: 15
+needed_slices: 62
+paths: {0 0 3 3 13 13}
+slices required:
+{2 2 2 3 2 3}
+slices start:
+{42 44 33 35 16 18}
+tuples:
+{20 20 12 27 12 17}
+dist: 144
+dist: 144
+dist: 340
+dist: 340
+dist: 511
+dist: 511
+
+vlink src/dst: 7 9
+number of protected paths set: 3
+needed_slices: 199
+paths: {0 1 1 1 16 16 16 16}
+slices required:
+{2 2 2 5 2 2 4 4}
+slices start:
+{0 10 12 46 2 7 21 25}
+tuples:
+{12 12 12 32 12 12 24 24}
+dist: 631
+dist: 642
+dist: 642
+dist: 642
+dist: 749
+dist: 749
+dist: 749
+dist: 749
+
+vlink src/dst: 8 14
+number of protected paths set: 3
+needed_slices: 120
+paths: {1 1 1 1 2 2 2 2}
+slices required:
+{2 2 2 4 2 2 2 4}
+slices start:
+{29 31 33 35 51 53 55 57}
+tuples:
+{12 12 12 25 12 12 12 25}
+dist: 514
+dist: 514
+dist: 514
+dist: 514
+dist: 525
+dist: 525
+dist: 525
+dist: 525
+
+vlink src/dst: 5 7
+number of protected paths set: 15
+needed_slices: 54
+paths: {1 3 13}
+slices required:
+{3 3 3}
+slices start:
+{9 19 39}
+tuples:
+{18 18 17}
+dist: 417
+dist: 459
+dist: 594
+
+vlink src/dst: 4 7
+number of protected paths set: 15
+needed_slices: 111
+paths: {0 0 0 2 2 2 16}
+slices required:
+{2 2 3 2 2 3 2}
+slices start:
+{39 41 43 22 24 61 61}
+tuples:
+{12 12 17 12 12 17 6}
+dist: 535
+dist: 535
+dist: 535
+dist: 586
+dist: 586
+dist: 586
+dist: 881
+
+vlink src/dst: 0 1
+number of protected paths set: 15
+needed_slices: 70
+paths: {0 0 5 8 8 13 13}
+slices required:
+{2 4 2 2 2 2 2}
+slices start:
+{0 7 4 14 64 12 14}
+tuples:
+{12 34 12 12 12 12 12}
+dist: 353
+dist: 353
+dist: 440
+dist: 481
+dist: 481
+dist: 622
+dist: 622
+
+vlink src/dst: 10 17
+number of protected paths set: 15
+needed_slices: 44
+paths: {0 14 15}
+slices required:
+{2 2 2}
+slices start:
+{31 46 14}
+tuples:
+{12 12 12}
+dist: 417
+dist: 682
+dist: 772
+
+vlink src/dst: 1 16
+number of protected paths set: 15
+needed_slices: 36
+paths: {1 4}
+slices required:
+{3 3}
+slices start:
+{16 38}
+tuples:
+{18 17}
+dist: 459
+dist: 502
+
+vlink src/dst: 1 12
+number of protected paths set: 3
+needed_slices: 60
+paths: {1 1 13 13}
+slices required:
+{2 3 2 3}
+slices start:
+{0 41 2 22}
+tuples:
+{12 27 12 17}
+dist: 365
+dist: 365
+dist: 526
+dist: 526
+
+vlink src/dst: 14 18
+number of protected paths set: 3
+needed_slices: 90
+paths: {6 6 12 12}
+slices required:
+{2 3 2 3}
+slices start:
+{46 48 10 19}
+tuples:
+{6 11 6 11}
+dist: 946
+dist: 946
+dist: 985
+dist: 985
+
+vlink src/dst: 3 5
+number of protected paths set: 15
+needed_slices: 30
+paths: {0 3 16}
+slices required:
+{2 2 2}
+slices start:
+{4 4 29}
+tuples:
+{20 12 12}
+dist: 262
+dist: 415
+dist: 651
+
+vlink src/dst: 6 12
+number of protected paths set: 3
+needed_slices: 72
+paths: {1 1 1 13 13 13}
+slices required:
+{2 2 2 2 2 2}
+slices start:
+{6 8 16 0 4 6}
+tuples:
+{12 12 12 12 12 12}
+dist: 653
+dist: 653
+dist: 653
+dist: 720
+dist: 720
+dist: 720
+
+vlink src/dst: 9 12
+number of protected paths set: 3
+needed_slices: 29
+paths: {0 4 4}
+slices required:
+{3 2 2}
+slices start:
+{18 10 12}
+tuples:
+{27 12 12}
+dist: 256
+dist: 601
+dist: 601
+
+vlink src/dst: 3 19
+number of protected paths set: 15
+needed_slices: 26
+paths: {0 6 6}
+slices required:
+{3 2 2}
+slices start:
+{18 12 22}
+tuples:
+{27 12 12}
+dist: 327
+dist: 543
+dist: 543
+
+vlink src/dst: 11 18
+number of protected paths set: 3
+needed_slices: 26
+paths: {0 2}
+slices required:
+{2 2}
+slices start:
+{19 31}
+tuples:
+{12 12}
+dist: 462
+dist: 531
+
+vlink src/dst: 2 16
+number of protected paths set: 15
+needed_slices: 64
+paths: {0 0 0 2 2 2 2}
+slices required:
+{2 3 3 2 2 2 4}
+slices start:
+{2 24 31 33 35 41 48}
+tuples:
+{12 27 27 12 12 12 25}
+dist: 384
+dist: 384
+dist: 384
+dist: 485
+dist: 485
+dist: 485
+dist: 485
+
+vlink src/dst: 18 19
+number of protected paths set: 3
+needed_slices: 36
+paths: {1 1 3 3}
+slices required:
+{2 2 2 2}
+slices start:
+{43 45 14 16}
+tuples:
+{12 12 12 12}
+dist: 527
+dist: 527
+dist: 538
+dist: 538
+
+vlink src/dst: 3 18
+number of protected paths set: 3
+needed_slices: 40
+paths: {0 0 0 3 3 3}
+slices required:
+{2 2 2 2 2 3}
+slices start:
+{0 2 4 0 37 52}
+tuples:
+{20 20 20 12 12 18}
+dist: 200
+dist: 200
+dist: 200
+dist: 467
+dist: 467
+dist: 467
+
+vlink src/dst: 6 18
+number of protected paths set: 3
+needed_slices: 120
+paths: {0 0 0 11 11 15 15 15}
+slices required:
+{2 4 6 2 2 2 2 4}
+slices start:
+{8 27 55 55 57 27 39 63}
+tuples:
+{12 25 39 12 12 12 12 24}
+dist: 463
+dist: 463
+dist: 463
+dist: 720
+dist: 720
+dist: 729
+dist: 729
+dist: 729
+
+vlink src/dst: 4 19
+number of protected paths set: 15
+needed_slices: 12
+paths: {0 0 1 1}
+slices required:
+{2 2 2 2}
+slices start:
+{0 2 2 18}
+tuples:
+{20 20 20 20}
+dist: 133
+dist: 133
+dist: 249
+dist: 249
+
+vlink src/dst: 4 6
+number of protected paths set: 15
+needed_slices: 8
+paths: {0 1}
+slices required:
+{2 3}
+slices start:
+{15 29}
+tuples:
+{29 27}
+dist: 59
+dist: 323
+
+vlink src/dst: 0 2
+number of protected paths set: 15
+needed_slices: 58
+paths: {0 0 3 3 3 9 9}
+slices required:
+{2 3 2 2 2 2 3}
+slices start:
+{16 22 0 2 4 18 64}
+tuples:
+{12 27 12 12 12 12 17}
+dist: 325
+dist: 325
+dist: 420
+dist: 420
+dist: 420
+dist: 537
+dist: 537
+
+vlink src/dst: 0 6
+number of protected paths set: 15
+needed_slices: 59
+paths: {0 0 0 1 1 1 14}
+slices required:
+{2 2 3 2 2 3 2}
+slices start:
+{25 27 29 6 8 16 32}
+tuples:
+{12 12 18 12 12 18 12}
+dist: 425
+dist: 425
+dist: 425
+dist: 439
+dist: 439
+dist: 439
+dist: 624
+41 second(s) taken for solution
+44 second(s) taken in total
+cost = 1822
+

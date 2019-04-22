@@ -1,0 +1,288 @@
+
+3 second(s) taken for initialization
+
+vlink src/dst: 6 9
+number of protected paths set: 15
+needed_slices: 28
+paths: {0 0 2 2}
+slices required:
+{2 2 2 2}
+slices start:
+{0 2 0 2}
+tuples:
+{20 20 20 20}
+dist: 237
+dist: 237
+dist: 273
+dist: 273
+
+vlink src/dst: 5 8
+number of protected paths set: 3
+needed_slices: 42
+paths: {0 0 6 6}
+slices required:
+{2 2 2 3}
+slices start:
+{0 2 4 6}
+tuples:
+{20 20 12 27}
+dist: 219
+dist: 219
+dist: 387
+dist: 387
+
+vlink src/dst: 4 8
+number of protected paths set: 3
+needed_slices: 52
+paths: {0 0 4 4}
+slices required:
+{2 2 2 2}
+slices start:
+{4 6 9 11}
+tuples:
+{12 12 12 12}
+dist: 485
+dist: 485
+dist: 550
+dist: 550
+
+vlink src/dst: 15 17
+number of protected paths set: 15
+needed_slices: 56
+paths: {0 0 9 9}
+slices required:
+{2 2 2 2}
+slices start:
+{4 6 9 11}
+tuples:
+{12 12 12 12}
+dist: 498
+dist: 498
+dist: 593
+dist: 593
+
+vlink src/dst: 16 17
+number of protected paths set: 15
+needed_slices: 28
+paths: {1 11}
+slices required:
+{2 2}
+slices start:
+{8 0}
+tuples:
+{12 12}
+dist: 416
+dist: 574
+
+vlink src/dst: 3 5
+number of protected paths set: 15
+needed_slices: 27
+paths: {0 3}
+slices required:
+{3 3}
+slices start:
+{8 10}
+tuples:
+{27 18}
+dist: 387
+dist: 451
+
+vlink src/dst: 10 19
+number of protected paths set: 15
+needed_slices: 10
+paths: {0 2}
+slices required:
+{2 2}
+slices start:
+{2 4}
+tuples:
+{20 20}
+dist: 130
+dist: 245
+
+vlink src/dst: 7 13
+number of protected paths set: 15
+needed_slices: 40
+paths: {1 1 3 3}
+slices required:
+{2 3 2 3}
+slices start:
+{2 11 6 13}
+tuples:
+{12 27 12 27}
+dist: 337
+dist: 337
+dist: 381
+dist: 381
+
+vlink src/dst: 0 6
+number of protected paths set: 15
+needed_slices: 19
+paths: {0 3}
+slices required:
+{2 3}
+slices start:
+{0 13}
+tuples:
+{20 18}
+dist: 257
+dist: 453
+
+vlink src/dst: 0 19
+number of protected paths set: 15
+needed_slices: 35
+paths: {2 2 3 3}
+slices required:
+{2 3 2 3}
+slices start:
+{16 18 16 18}
+tuples:
+{12 27 12 27}
+dist: 334
+dist: 334
+dist: 375
+dist: 375
+
+vlink src/dst: 10 12
+number of protected paths set: 15
+needed_slices: 27
+paths: {0 0 4 4}
+slices required:
+{2 2 2 3}
+slices start:
+{8 21 0 4}
+tuples:
+{20 20 12 27}
+dist: 259
+dist: 259
+dist: 358
+dist: 358
+
+vlink src/dst: 7 12
+number of protected paths set: 15
+needed_slices: 6
+paths: {0 1}
+slices required:
+{2 2}
+slices start:
+{2 7}
+tuples:
+{29 20}
+dist: 91
+dist: 201
+
+vlink src/dst: 1 15
+number of protected paths set: 15
+needed_slices: 28
+paths: {2 3}
+slices required:
+{2 2}
+slices start:
+{2 0}
+tuples:
+{12 12}
+dist: 586
+dist: 605
+
+vlink src/dst: 1 13
+number of protected paths set: 15
+needed_slices: 22
+paths: {0 8}
+slices required:
+{2 2}
+slices start:
+{0 2}
+tuples:
+{20 12}
+dist: 252
+dist: 546
+
+vlink src/dst: 4 18
+number of protected paths set: 15
+needed_slices: 52
+paths: {0 0 6 6}
+slices required:
+{2 2 2 2}
+slices start:
+{21 23 4 6}
+tuples:
+{12 12 6 6}
+dist: 709
+dist: 709
+dist: 826
+dist: 826
+
+vlink src/dst: 3 16
+number of protected paths set: 15
+needed_slices: 10
+paths: {0 1}
+slices required:
+{2 2}
+slices start:
+{4 13}
+tuples:
+{20 20}
+dist: 172
+dist: 252
+
+vlink src/dst: 11 14
+number of protected paths set: 3
+needed_slices: 71
+paths: {0 0 15 15 15}
+slices required:
+{2 3 2 2 2}
+slices start:
+{9 14 13 21 23}
+tuples:
+{12 17 12 12 12}
+dist: 561
+dist: 561
+dist: 778
+dist: 778
+dist: 778
+
+vlink src/dst: 2 9
+number of protected paths set: 15
+needed_slices: 24
+paths: {0 12}
+slices required:
+{2 2}
+slices start:
+{0 25}
+tuples:
+{12 12}
+dist: 419
+dist: 603
+
+vlink src/dst: 14 18
+number of protected paths set: 3
+needed_slices: 73
+paths: {0 0 14 14 14}
+slices required:
+{2 3 2 2 2}
+slices start:
+{2 4 16 18 25}
+tuples:
+{12 27 12 12 12}
+dist: 390
+dist: 390
+dist: 759
+dist: 759
+dist: 759
+
+vlink src/dst: 2 11
+number of protected paths set: 15
+needed_slices: 24
+paths: {0 5}
+slices required:
+{3 3}
+slices start:
+{8 25}
+tuples:
+{18 17}
+dist: 415
+dist: 572
+6 second(s) taken for solution
+9 second(s) taken in total
+cost = 674
+

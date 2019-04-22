@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/hua_to_modify.dir/main.cpp.o CMakeFiles/hua_to_modify.dir/problem_spec.cpp.o CMakeFiles/hua_to_modify.dir/reading_utilities.cpp.o CMakeFiles/hua_to_modify.dir/split_option_finder.cpp.o CMakeFiles/hua_to_modify.dir/reach_table.cpp.o CMakeFiles/hua_to_modify.dir/convertor.cpp.o CMakeFiles/hua_to_modify.dir/util.cpp.o  -o hua_to_modify 
